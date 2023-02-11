@@ -2835,6 +2835,8 @@ class Api extends MX_Controller
         //echo $this->hospitalID;
     }
 
+
+
     public function getHospitalsList()
     {
         $region = $this->input->get('region');
@@ -3070,7 +3072,9 @@ class Api extends MX_Controller
 
 
 
+        logToConsoleFile("getAllDepartments");
         $hospitalID = $this->input->post('hospital_id');
+
 
         $data = $this->api_model->getDepartment($hospitalID);
         echo json_encode($data);
