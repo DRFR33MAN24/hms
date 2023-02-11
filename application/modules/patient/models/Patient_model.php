@@ -32,9 +32,15 @@ class Patient_model extends CI_model
 
     function getPatient()
     {
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        $this->db->order_by('id', 'desc');
-        $query = $this->db->get('patient');
+        // $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        // $this->db->order_by('id', 'desc');
+        // $query = $this->db->get('patient');
+        // return $query->result();
+
+        $sql = "SELECT * FROM patient
+                JOIN patients_hospitals ON patient.id = patients_hospitals.patient_id
+                WHERE patients_hospitals.hospital_id = ?";
+        $query = $this->db->query($sql, array($this->session->userdata('hospital_id')));
         return $query->result();
     }
 
@@ -50,15 +56,21 @@ class Patient_model extends CI_model
 
     function getPatientWithoutSearch($order, $dir)
     {
-        if ($order != null) {
-            $this->db->order_by($order, $dir);
-        } else {
-            //$this->db->order_by('id', 'desc');
-            $this->db->order_by('name', 'asc');
-        }
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        $this->db->order_by('id', 'desc');
-        $query = $this->db->get('patient');
+        // if ($order != null) {
+        //     $this->db->order_by($order, $dir);
+        // } else {
+        //     //$this->db->order_by('id', 'desc');
+        //     $this->db->order_by('name', 'asc');
+        // }
+        // $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        // $this->db->order_by('id', 'desc');
+        // $query = $this->db->get('patient');
+        // return $query->result();
+
+        $sql = "SELECT * FROM patient
+                JOIN patients_hospitals ON patient.id = patients_hospitals.patient_id
+                WHERE patients_hospitals.hospital_id = ?";
+        $query = $this->db->query($sql, array($this->session->userdata('hospital_id')));
         return $query->result();
     }
 
@@ -80,15 +92,33 @@ class Patient_model extends CI_model
 
     function getPatientByLimit($limit, $start, $order, $dir)
     {
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        log_message('error', $dir);
+        //MM valid
+
+        // $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        // if ($order != null) {
+        //     $this->db->order_by($order, $dir);
+        // } else {
+        //     //$this->db->order_by('id', 'desc');
+        //     $this->db->order_by('name', 'asc');
+        // }
+        // $this->db->limit($limit, $start);
+        // $query = $this->db->get('patient');
+        // return $query->result();
+
+
+        $this->db->select('*');
+        $this->db->from('patient');
+        $this->db->join('patients_hospitals', 'patient.id = patients_hospitals.patient_id');
+        $this->db->where('patients_hospitals.hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->limit($limit, $start);
         if ($order != null) {
-            $this->db->order_by($order, $dir);
+            $this->db->order_by('patient.' . $order, $dir);
         } else {
             //$this->db->order_by('id', 'desc');
-            $this->db->order_by('name', 'asc');
+            $this->db->order_by('patient.name', 'asc');
         }
-        $this->db->limit($limit, $start);
-        $query = $this->db->get('patient');
+        $query = $this->db->get();
         return $query->result();
     }
 

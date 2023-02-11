@@ -1297,7 +1297,7 @@ class Patient extends MX_Controller
         $columns_valid = array(
             "0" => "id",
             "1" => "name",
-            "2" => "category",
+            "2" => "phone",
         );
         $values = $this->settings_model->getColumnOrder($order, $columns_valid);
         $dir = $values[0];
