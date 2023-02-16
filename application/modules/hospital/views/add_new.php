@@ -69,6 +69,14 @@
                                                                                                 ?>' placeholder="" required="">
                             </div>
                             <div class="form-group">
+                                <label for="exampleInputEmail1"><?php echo lang('area'); ?> &ast; </label>
+                                <input type="text" class="form-control" name="area" value='<?php
+                                                                                            if (!empty($hospital->area)) {
+                                                                                                echo $hospital->area;
+                                                                                            }
+                                                                                            ?>' placeholder="" required="">
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputEmail1"><?php echo lang('phone'); ?> &ast; </label>
                                 <input type="text" class="form-control" name="phone" value='<?php
                                                                                             if (!empty($hospital->phone)) {

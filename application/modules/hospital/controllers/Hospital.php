@@ -48,10 +48,11 @@ class Hospital extends MX_Controller
         $trial_version = $this->input->post('trial_version');
         $id = $this->input->post('id');
         $name = $this->input->post('name');
-        $username =$this->input->post('username');
+        $username = $this->input->post('username');
         $password = $this->input->post('password');
         $email = $this->input->post('email');
         $address = $this->input->post('address');
+        $area = $this->input->post('area');
         $phone = $this->input->post('phone');
         $package = $this->input->post('package');
         $language = $this->input->post('language');
@@ -90,6 +91,7 @@ class Hospital extends MX_Controller
         $this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[5]|max_length[100]|xss_clean');
         // Validating Address Field   
         $this->form_validation->set_rules('address', 'Address', 'trim|required|min_length[5]|max_length[500]|xss_clean');
+        $this->form_validation->set_rules('area', 'Area', 'trim|required|xss_clean');
         // Validating Phone Field           
         $this->form_validation->set_rules('phone', 'Phone', 'trim|required|min_length[5]|max_length[50]|xss_clean');
 
@@ -113,9 +115,10 @@ class Hospital extends MX_Controller
                 if ($trial_version == '1') {
                     $data = array(
                         'name' => $name,
-                            'username'=>$username,
+                        'username' => $username,
                         'email' => $email,
                         'address' => $address,
+                        'area' => $area,
                         'phone' => $phone,
                         'password' => $password,
                         'package' => $package,
@@ -133,9 +136,10 @@ class Hospital extends MX_Controller
                 } else {
                     $data = array(
                         'name' => $name,
-                        'username'=>$username,
+                        'username' => $username,
                         'email' => $email,
                         'address' => $address,
+                        'area' => $area,
                         'phone' => $phone,
                         'password' => $password,
                         'package' => $package,
@@ -153,9 +157,10 @@ class Hospital extends MX_Controller
             } else {
                 $data = array(
                     'name' => $name,
-                    'username'=>$username,
+                    'username' => $username,
                     'email' => $email,
                     'address' => $address,
+                    'area' => $area,
                     'phone' => $phone,
                     'country' => $country,
 
@@ -297,6 +302,7 @@ class Hospital extends MX_Controller
         $password = $data1['password'];
         $email = $data1['email'];
         $address = $data1['address'];
+        $area = $data1['area'];
         $phone = $data1['phone'];
         $package = $data1['package'];
         $language = $data1['language'];
@@ -331,9 +337,10 @@ class Hospital extends MX_Controller
         $data = array();
         $data = array(
             'name' => $name,
-            'username'=>$username,
+            'username' => $username,
             'email' => $email,
             'address' => $address,
+            'area' => $area,
             'phone' => $phone,
             'package' => $package,
             'p_limit' => $p_limit,
@@ -365,6 +372,7 @@ class Hospital extends MX_Controller
                     'title' => $name,
                     'email' => $email,
                     'address' => $address,
+                    'area' => $area,
                     'phone' => $phone,
                     'language' => $language,
                     'system_vendor' => 'Code Aristos - Hospital management System',

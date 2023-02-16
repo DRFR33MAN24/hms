@@ -1348,7 +1348,7 @@ class Patient extends MX_Controller
 
             if ($this->ion_auth->in_group(array('admin'))) {
                 $info[] = array(
-                    $patient->id,
+                    $patient->patient_id,
                     $patient->name,
                     $patient->phone,
                     $this->settings_model->getSettings()->currency . $this->patient_model->getDueBalanceByPatientId($patient->id),
@@ -1358,7 +1358,7 @@ class Patient extends MX_Controller
 
             if ($this->ion_auth->in_group(array('Accountant', 'Receptionist'))) {
                 $info[] = array(
-                    $patient->id,
+                    $patient->patient_id,
                     $patient->name,
                     $patient->phone,
                     $this->settings_model->getSettings()->currency . $this->patient_model->getDueBalanceByPatientId($patient->id),
@@ -1368,7 +1368,7 @@ class Patient extends MX_Controller
 
             if ($this->ion_auth->in_group(array('Laboratorist', 'Nurse', 'Doctor'))) {
                 $info[] = array(
-                    $patient->id,
+                    $patient->patient_id,
                     $patient->name,
                     $patient->phone,
                     $options1 . ' ' . $options6 . ' ' . $options3,
@@ -1448,7 +1448,7 @@ class Patient extends MX_Controller
             $due = $this->settings_model->getSettings()->currency . $this->patient_model->getDueBalanceByPatientId($patient->id);
 
             $info[] = array(
-                $patient->id,
+                $patient->patient_id,
                 $patient->name,
                 $patient->phone,
                 $due,

@@ -1124,6 +1124,7 @@ $lang['add_existing'] = 'Add Existing';
 // 26th October, 2022
 $lang['sign_in'] = 'Sign In';
 $lang['appointment_button_block_settings'] = 'Appointment Button Block Settings';
+$lang['area'] = 'Area';
 
 $lang['jan'] = 'Jan';
 $lang['feb'] = 'Feb';

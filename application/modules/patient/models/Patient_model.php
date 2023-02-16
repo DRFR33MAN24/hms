@@ -119,6 +119,7 @@ class Patient_model extends CI_model
             $this->db->order_by('patient.name', 'asc');
         }
         $query = $this->db->get();
+        log_message('error', json_encode($query->result()));
         return $query->result();
     }
 
@@ -159,18 +160,20 @@ class Patient_model extends CI_model
     function getPatientById($id)
     {
         log_message('error', "getPatientById");
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        log_message('error', $id);
+        // $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        // $this->db->where('id', $id);
+        // $query = $this->db->get('patient');
+        // return $query->row();
+
+
         $this->db->where('id', $id);
+        $query = $this->db->get('patients_hospitals');
+        $patient_id = $query->row()->{'patient_id'};
+
+        $this->db->where('id', $patient_id);
         $query = $this->db->get('patient');
         return $query->row();
-        // $this->db->select('*');
-        // $this->db->from('patient');
-        // $this->db->join('patients_hospitals', 'patient.id = patients_hospitals.patient_id');
-        // $this->db->where('patients_hospitals.hospital_id', $this->session->userdata('hospital_id'));
-        // $this->db->where('patients_hospitals.patient_id', $id);
-        // $result = $this->db->get()->row();
-        // log_message('error', $result);
-        // return $result;
     }
 
     function getPatientByIonUserId($id)
@@ -531,6 +534,7 @@ class Patient_model extends CI_model
     }
     function getPatientInfo($searchTerm)
     {
+        log_message('error', 'getPatientInfo');
         if (!empty($searchTerm)) {
             $this->db->select('*');
             $this->db->where('hospital_id', $this->session->userdata('hospital_id'));

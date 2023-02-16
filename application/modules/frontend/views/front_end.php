@@ -349,6 +349,10 @@ $title = explode(' ', $settings->title);
                             <input type="text" class="form-control" name="name" value='' placeholder="" required="">
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="exampleInputEmail1"> <?php echo lang('hospital'); ?> <?php echo lang('area'); ?> &ast;</label>
+                            <input type="text" class="form-control" name="area" value='' placeholder="" required="">
+                        </div>
+                        <div class="form-group col-md-6">
                             <label for="exampleInputEmail1"> <?php echo lang('hospital'); ?> <?php echo lang('address'); ?> &ast;</label>
                             <input type="text" class="form-control" name="address" value='' placeholder="" required="">
                         </div>

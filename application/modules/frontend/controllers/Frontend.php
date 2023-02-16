@@ -1410,6 +1410,7 @@ class Frontend extends MX_Controller
         //$password = $this->input->post('password');
         $email = $this->input->post('email');
         $address = $this->input->post('address');
+        $area = $this->input->post('area');
         $phone = $this->input->post('phone');
         $package = $this->input->post('package');
         $language = $this->input->post('language');
@@ -1424,6 +1425,7 @@ class Frontend extends MX_Controller
                 'name' => $name,
                 'email' => $email,
                 'address' => $address,
+                'area' => $area,
                 'phone' => $phone,
                 'package' => $package,
                 'language' => $language,
@@ -1440,6 +1442,7 @@ class Frontend extends MX_Controller
                 'name' => $name,
                 'email' => $email,
                 'address' => $address,
+                'area' => $area,
                 'phone' => $phone,
                 'package' => $package,
                 'country' => $country,
@@ -1564,6 +1567,7 @@ class Frontend extends MX_Controller
         $password = '12345';
         $email = $data1['email'];
         $address = $data1['address'];
+        $area = $data1['area'];
         $phone = $data1['phone'];
         $package = $data1['package'];
         $language = $data1['language'];
@@ -1597,6 +1601,7 @@ class Frontend extends MX_Controller
             'name' => $name,
             'email' => $email,
             'address' => $address,
+            'area' => $area,
             'phone' => $phone,
             'package' => $package,
             'p_limit' => $p_limit,
@@ -1628,6 +1633,7 @@ class Frontend extends MX_Controller
                 'title' => $name,
                 'email' => $email,
                 'address' => $address,
+                'area' => $area,
                 'phone' => $phone,
                 'language' => $language,
                 'system_vendor' => 'Code Aristos - Hospital management System',
@@ -1896,31 +1902,31 @@ For Any Support Please Contact with Phone No: {phone}';
     function verifyPurchase()
     {
         $data['verified'] = $this->input->get('verify');
-     //   $this->load->view('home/dashboard.php');
+        //   $this->load->view('home/dashboard.php');
         $this->load->view('verify', $data);
-      //  $this->load->view('home/footer.php');
+        //  $this->load->view('home/footer.php');
     }
 
 
     function verify()
     {
         $purchase_code = $this->input->post('purchase_code');
-        $base_url = base_url().'-';
+        $base_url = base_url() . '-';
         $insertPurchase = file_get_contents("http://verify.codearistos.net/api/verify?validation=" . $purchase_code . "&base_url=" . $base_url);
         $insertPurchase = json_decode($insertPurchase);
         if ($insertPurchase->message == 3) {
             $this->session->set_flashdata('message', 'Purcase code validated successfully');
             redirect("frontend/verifyPurchase?verify=yes");
-        } elseif($insertPurchase->message == 1){
+        } elseif ($insertPurchase->message == 1) {
             $this->session->set_flashdata('message', 'Already Validated');
             redirect("frontend/verifyPurchase?verify=yes");
-        }elseif($insertPurchase->message == 2){
+        } elseif ($insertPurchase->message == 2) {
             $this->session->set_flashdata('message', 'This purchase code is validated for other domain. Please purchase a new licence or send request to support for removing the prevous domain.');
             redirect("frontend/verifyPurchase");
-        }elseif($insertPurchase->message == 4){
+        } elseif ($insertPurchase->message == 4) {
             $this->session->set_flashdata('message', 'This domain is already registerred with another purchase code.');
             redirect("frontend/verifyPurchase");
-        } elseif($insertPurchase->message == 0){
+        } elseif ($insertPurchase->message == 0) {
             $this->session->set_flashdata('message', 'This purchase code is invalid');
             redirect("frontend/verifyPurchase");
         }
