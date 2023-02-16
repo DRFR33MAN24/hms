@@ -124,32 +124,58 @@ class Patient_model extends CI_model
 
     function getPatientByLimitBySearch($limit, $start, $search, $order, $dir)
     {
+        log_message('error', "getPatientByLimitBySearch");
+        // if ($order != null) {
+        //     $this->db->order_by($order, $dir);
+        // } else {
+        //     //$this->db->order_by('id', 'desc');
+        //     $this->db->order_by('name', 'asc');
+        // }
+        // $this->db->limit($limit, $start);
+        // $query = $this->db->select('*')
+        //     ->from('patient')
+        //     ->where('hospital_id', $this->session->userdata('hospital_id'))
+        //     ->where("(id LIKE '%" . $search . "%' OR name LIKE '%" . $search . "%' OR phone LIKE '%" . $search . "%' OR address LIKE '%" . $search . "%')", NULL, FALSE)
+        //     ->get();;
+        // return $query->result();
+
+        $this->db->select('*');
+        $this->db->from('patient');
+        $this->db->join('patients_hospitals', 'patient.id = patients_hospitals.patient_id');
+        $this->db->where('patients_hospitals.hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where("(patient.id LIKE '%" . $search . "%' OR patient.name LIKE '%" . $search . "%' OR patient.phone LIKE '%" . $search . "%' OR patient.address LIKE '%" . $search . "%')", NULL, FALSE);
+        $this->db->limit($limit, $start);
         if ($order != null) {
-            $this->db->order_by($order, $dir);
+            $this->db->order_by('patient.' . $order, $dir);
         } else {
             //$this->db->order_by('id', 'desc');
-            $this->db->order_by('name', 'asc');
+            $this->db->order_by('patient.name', 'asc');
         }
-        $this->db->limit($limit, $start);
-        $query = $this->db->select('*')
-            ->from('patient')
-            ->where('hospital_id', $this->session->userdata('hospital_id'))
-            ->where("(id LIKE '%" . $search . "%' OR name LIKE '%" . $search . "%' OR phone LIKE '%" . $search . "%' OR address LIKE '%" . $search . "%')", NULL, FALSE)
-            ->get();;
+        $query = $this->db->get();
+
         return $query->result();
     }
 
     function getPatientById($id)
     {
+        log_message('error', "getPatientById");
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('id', $id);
         $query = $this->db->get('patient');
         return $query->row();
+        // $this->db->select('*');
+        // $this->db->from('patient');
+        // $this->db->join('patients_hospitals', 'patient.id = patients_hospitals.patient_id');
+        // $this->db->where('patients_hospitals.hospital_id', $this->session->userdata('hospital_id'));
+        // $this->db->where('patients_hospitals.patient_id', $id);
+        // $result = $this->db->get()->row();
+        // log_message('error', $result);
+        // return $result;
     }
 
     function getPatientByIonUserId($id)
     {
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('ion_user_id', $id);
         $query = $this->db->get('patient');
         return $query->row();
@@ -157,7 +183,7 @@ class Patient_model extends CI_model
 
     function getPatientByEmail($email)
     {
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('email', $email);
         $query = $this->db->get('patient');
         return $query->row();

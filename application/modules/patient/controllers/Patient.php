@@ -374,6 +374,7 @@ class Patient extends MX_Controller
     function editPatientByJason()
     {
         $id = $this->input->get('id');
+        log_message('error', $id);
         $data['patient'] = $this->patient_model->getPatientById($id);
         $data['doctor'] = $this->doctor_model->getDoctorById($data['patient']->doctor);
         echo json_encode($data);
