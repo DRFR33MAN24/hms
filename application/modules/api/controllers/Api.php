@@ -772,6 +772,7 @@ class Api extends MX_Controller
         $patient_ion_id = $this->input->post('id');
 
         $patient_id = $this->api_model->getPatientByIonUserIdAllHospitals($patient_ion_id)->id;
+        log_message('error', $patient_id);
         $data = $this->api_model->getAllPerscriptionsByPatientId($patient_id);
         echo json_encode($data);
     }
@@ -3108,9 +3109,9 @@ class Api extends MX_Controller
     function getLabReports()
     {
         $userionId = $this->input->post('user_ion_id');
-        $this->hospitalID = $this->getHospitalID($userionId);
-        $userId = $this->api_model->getPatientByIonUserId($userionId, $this->hospitalID)->id;
-        $labs = $this->api_model->getPatientLabReport($userId, $this->hospitalID);
+        // $this->hospitalID = $this->getHospitalID($userionId);
+        $userId = $this->api_model->getPatientByIonUserIdAllHospitals($userionId)->id;
+        $labs = $this->api_model->getPatientLabReport($userId);
 
         foreach ($labs as $key => $lab) {
             $new_entry = array();

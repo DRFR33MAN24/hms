@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Prescription extends MX_Controller {
+class Prescription extends MX_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->model('prescription_model');
         $this->load->model('medicine/medicine_model');
@@ -16,7 +18,8 @@ class Prescription extends MX_Controller {
         }
     }
 
-    public function index() {
+    public function index()
+    {
 
         if ($this->ion_auth->in_group(array('Patient'))) {
             redirect('home/permission');
@@ -30,12 +33,13 @@ class Prescription extends MX_Controller {
         }
         $data['prescriptions'] = $this->prescription_model->getPrescriptionByDoctorId($doctor_id);
         $data['settings'] = $this->settings_model->getSettings();
-        $this->load->view('home/dashboard', $data); 
+        $this->load->view('home/dashboard', $data);
         $this->load->view('prescription', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    function all() {
+    function all()
+    {
 
         if (!$this->ion_auth->in_group(array('admin', 'Doctor', 'Pharmacist'))) {
             redirect('home/permission');
@@ -46,12 +50,13 @@ class Prescription extends MX_Controller {
         $data['doctors'] = $this->doctor_model->getDoctor();
         $data['prescriptions'] = $this->prescription_model->getPrescription();
         $data['settings'] = $this->settings_model->getSettings();
-        $this->load->view('home/dashboard', $data); 
+        $this->load->view('home/dashboard', $data);
         $this->load->view('all_prescription', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    public function addPrescriptionView() {
+    public function addPrescriptionView()
+    {
 
         if (!$this->ion_auth->in_group(array('admin', 'Doctor'))) {
             redirect('home/permission');
@@ -63,12 +68,13 @@ class Prescription extends MX_Controller {
         $data['doctors'] = $this->doctor_model->getDoctor();
 
         $data['settings'] = $this->settings_model->getSettings();
-        $this->load->view('home/dashboard', $data); 
+        $this->load->view('home/dashboard', $data);
         $this->load->view('add_new_prescription_view', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    public function addNewPrescription() {
+    public function addNewPrescription()
+    {
 
         if (!$this->ion_auth->in_group(array('admin', 'Doctor'))) {
             redirect('home/permission');
@@ -153,16 +159,17 @@ class Prescription extends MX_Controller {
                 $data['patients'] = $this->patient_model->getPatient();
                 $data['doctors'] = $this->doctor_model->getDoctor();
                 $data['settings'] = $this->settings_model->getSettings();
-                $this->load->view('home/dashboard', $data); 
+                $this->load->view('home/dashboard', $data);
                 $this->load->view('add_new_prescription_view', $data);
-                $this->load->view('home/footer'); 
+                $this->load->view('home/footer');
             }
         } else {
             $data = array();
             $patientname = $this->patient_model->getPatientById($patient)->name;
             $doctorname = $this->doctor_model->getDoctorById($doctor)->name;
-            $data = array('date' => $date,
-                'patient' => $patient,
+            $data = array(
+                'date' => $date,
+                'patient' => $this->patient_model->getPatientById($patient)->id,
                 'doctor' => $doctor,
                 'symptom' => $symptom,
                 'medicine' => $final_report,
@@ -191,7 +198,8 @@ class Prescription extends MX_Controller {
         }
     }
 
-    function viewPrescription() {
+    function viewPrescription()
+    {
         $id = $this->input->get('id');
         $data['prescription'] = $this->prescription_model->getPrescriptionById($id);
 
@@ -200,16 +208,17 @@ class Prescription extends MX_Controller {
                 $this->load->view('home/permission');
             } else {
                 $data['settings'] = $this->settings_model->getSettings();
-                $this->load->view('home/dashboard', $data); 
+                $this->load->view('home/dashboard', $data);
                 $this->load->view('prescription_view_1', $data);
-                $this->load->view('home/footer'); 
+                $this->load->view('home/footer');
             }
         } else {
             $this->load->view('home/permission');
         }
     }
 
-    function viewPrescriptionPrint() {
+    function viewPrescriptionPrint()
+    {
         $id = $this->input->get('id');
         $data['prescription'] = $this->prescription_model->getPrescriptionById($id);
 
@@ -218,16 +227,17 @@ class Prescription extends MX_Controller {
                 $this->load->view('home/permission');
             } else {
                 $data['settings'] = $this->settings_model->getSettings();
-                $this->load->view('home/dashboard', $data); 
+                $this->load->view('home/dashboard', $data);
                 $this->load->view('prescription_view_print', $data);
-                $this->load->view('home/footer'); 
+                $this->load->view('home/footer');
             }
         } else {
             $this->load->view('home/permission');
         }
     }
 
-    function editPrescription() {
+    function editPrescription()
+    {
         $data = array();
         $id = $this->input->get('id');
         // $data['patients'] = $this->patient_model->getPatient();
@@ -242,7 +252,7 @@ class Prescription extends MX_Controller {
                 $this->load->view('home/permission');
             } else {
                 $data['settings'] = $this->settings_model->getSettings();
-                $this->load->view('home/dashboard', $data); 
+                $this->load->view('home/dashboard', $data);
                 $this->load->view('add_new_prescription_view', $data);
                 $this->load->view('home/footer'); // just the footer file 
             }
@@ -251,13 +261,15 @@ class Prescription extends MX_Controller {
         }
     }
 
-    function editPrescriptionByJason() {
+    function editPrescriptionByJason()
+    {
         $id = $this->input->get('id');
         $data['prescription'] = $this->prescription_model->getPrescriptionById($id);
         echo json_encode($data);
     }
 
-    function getPrescriptionByPatientIdByJason() {
+    function getPrescriptionByPatientIdByJason()
+    {
         $id = $this->input->get('id');
         $prescriptions = $this->prescription_model->getPrescriptionByPatientId($id);
         foreach ($prescriptions as $prescription) {
@@ -268,7 +280,8 @@ class Prescription extends MX_Controller {
         echo json_encode($data);
     }
 
-    function delete() {
+    function delete()
+    {
         $id = $this->input->get('id');
         $admin = $this->input->get('admin');
         $patient = $this->input->get('patient');
@@ -292,25 +305,28 @@ class Prescription extends MX_Controller {
         }
     }
 
-    public function prescriptionCategory() {
+    public function prescriptionCategory()
+    {
         if (!$this->ion_auth->logged_in()) {
             redirect('auth/login', 'refresh');
         }
         $data['categories'] = $this->prescription_model->getPrescriptionCategory();
         $data['settings'] = $this->settings_model->getSettings();
-        $this->load->view('home/dashboard', $data); 
+        $this->load->view('home/dashboard', $data);
         $this->load->view('prescription_category', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    public function addCategoryView() {
+    public function addCategoryView()
+    {
         $data['settings'] = $this->settings_model->getSettings();
-        $this->load->view('home/dashboard', $data); 
+        $this->load->view('home/dashboard', $data);
         $this->load->view('add_new_category_view');
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    public function addNewCategory() {
+    public function addNewCategory()
+    {
         $id = $this->input->post('id');
         $category = $this->input->post('category');
         $description = $this->input->post('description');
@@ -323,12 +339,13 @@ class Prescription extends MX_Controller {
         $this->form_validation->set_rules('description', 'Description', 'trim|required|min_length[1]|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) {
             $data['settings'] = $this->settings_model->getSettings();
-            $this->load->view('home/dashboard', $data); 
+            $this->load->view('home/dashboard', $data);
             $this->load->view('add_new_category_view');
-            $this->load->view('home/footer'); 
+            $this->load->view('home/footer');
         } else {
             $data = array();
-            $data = array('category' => $category,
+            $data = array(
+                'category' => $category,
                 'description' => $description
             );
             if (empty($id)) {
@@ -342,35 +359,39 @@ class Prescription extends MX_Controller {
         }
     }
 
-    function edit_category() {
+    function edit_category()
+    {
         $data = array();
         $id = $this->input->get('id');
         $data['prescription'] = $this->prescription_model->getPrescriptionCategoryById($id);
         $data['settings'] = $this->settings_model->getSettings();
-        $this->load->view('home/dashboard', $data); 
+        $this->load->view('home/dashboard', $data);
         $this->load->view('add_new_category_view', $data);
         $this->load->view('home/footer'); // just the footer file
     }
 
-    function editPrescriptionCategoryByJason() {
+    function editPrescriptionCategoryByJason()
+    {
         $id = $this->input->get('id');
         $data['prescriptioncategory'] = $this->prescription_model->getPrescriptionCategoryById($id);
         echo json_encode($data);
     }
 
-    function deletePrescriptionCategory() {
+    function deletePrescriptionCategory()
+    {
         $id = $this->input->get('id');
         $this->prescription_model->deletePrescriptionCategory($id);
         $this->session->set_flashdata('feedback', lang('deleted'));
         redirect('prescription/prescriptionCategory');
     }
 
-    function getPrescriptionListByDoctor() {
+    function getPrescriptionListByDoctor()
+    {
         $requestData = $_REQUEST;
         $start = $requestData['start'];
         $limit = $requestData['length'];
         $search = $this->input->post('search')['value'];
-        
+
         $order = $this->input->post("order");
         $columns_valid = array(
             "0" => "id",
@@ -379,7 +400,7 @@ class Prescription extends MX_Controller {
         $values = $this->settings_model->getColumnOrder($order, $columns_valid);
         $dir = $values[0];
         $order = $values[1];
-        
+
         $doctor_ion_id = $this->ion_auth->get_user_id();
         $doctor = $this->db->get_where('doctor', array('ion_user_id' => $doctor_ion_id))->row()->id;
         if ($limit == -1) {
@@ -460,12 +481,13 @@ class Prescription extends MX_Controller {
         echo json_encode($output);
     }
 
-    function getPrescriptionList() {
+    function getPrescriptionList()
+    {
         $requestData = $_REQUEST;
         $start = $requestData['start'];
         $limit = $requestData['length'];
         $search = $this->input->post('search')['value'];
-        
+
         $order = $this->input->post("order");
         $columns_valid = array(
             "0" => "id",
@@ -564,7 +586,6 @@ class Prescription extends MX_Controller {
 
         echo json_encode($output);
     }
-
 }
 
 /* End of file prescription.php */

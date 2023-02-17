@@ -262,9 +262,9 @@ class Api_model extends CI_model
         return $query->result();
     }
 
-    function getPatientLabReport($userId, $hospitalID)
+    function getPatientLabReport($userId)
     {
-        $this->db->where('hospital_id', $hospitalID);
+        // $this->db->where('hospital_id', $hospitalID);
         $this->db->where('patient', $userId);
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('lab');
