@@ -1,4 +1,3 @@
-
 <!--sidebar end-->
 <!--main content start-->
 <section id="main-content">
@@ -7,7 +6,7 @@
         <section class="panel">
             <header class="panel-heading">
                 <?php echo lang('birth_report'); ?>
-                <div class="col-md-4 no-print pull-right"> 
+                <div class="col-md-4 no-print pull-right">
                     <a data-toggle="modal" href="#myModal">
                         <div class="btn-group pull-right">
                             <button id="" class="btn green btn-xs">
@@ -32,20 +31,20 @@
                         </thead>
                         <tbody>
 
-                       
 
-                        <?php foreach ($reports as $report) { ?>
-                            <tr class="">
-                                <td><?php echo explode('*', $report->patient)[0]; ?></td>
-                                <td> <?php echo $report->description; ?></td>
-                                <td><?php echo $report->doctor; ?></td>
-                                <td class="center"><?php echo $report->date; ?></td>
-                                <td class="no-print">
-                                    <button type="button" class="btn btn-info btn-xs btn_width editbutton" title="<?php echo lang('edit'); ?>" data-toggle="modal" data-id="<?php echo $report->id; ?>"><i class="fa fa-edit"></i> </button>   
-                                    <a class="btn btn-info btn-xs btn_width delete_button" title="<?php echo lang('delete'); ?>" href="report/delete?id=<?php echo $report->id; ?>" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fa fa-trash"></i> </a>
-                                </td>
-                            </tr>
-                        <?php } ?>
+
+                            <?php foreach ($reports as $report) { ?>
+                                <tr class="">
+                                    <td><?php echo explode('*', $report->patient)[0]; ?></td>
+                                    <td> <?php echo $report->description; ?></td>
+                                    <td><?php echo $report->doctor; ?></td>
+                                    <td class="center"><?php echo $report->date; ?></td>
+                                    <td class="no-print">
+                                        <button type="button" class="btn btn-info btn-xs btn_width editbutton" title="<?php echo lang('edit'); ?>" data-toggle="modal" data-id="<?php echo $report->id; ?>"><i class="fa fa-edit"></i> </button>
+                                        <a class="btn btn-info btn-xs btn_width delete_button" title="<?php echo lang('delete'); ?>" href="report/delete?id=<?php echo $report->id; ?>" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fa fa-trash"></i> </a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
 
 
                         </tbody>
@@ -80,66 +79,66 @@
                         <label for="exampleInputEmail1"><?php echo lang('select_type'); ?> &ast;</label>
                         <select class="form-control m-bot15" name="type" value='' required="">
                             <option value="birth" <?php
-                            if (!empty($report->report_type)) {
-                                if ($report->report_type == 'birth') {
-                                    echo 'selected';
-                                }
-                            }
-                            ?>><?php echo lang('birth'); ?></option>
+                                                    if (!empty($report->report_type)) {
+                                                        if ($report->report_type == 'birth') {
+                                                            echo 'selected';
+                                                        }
+                                                    }
+                                                    ?>><?php echo lang('birth'); ?></option>
                             <option value="operation" <?php
-                            if (!empty($report->report_type)) {
-                                if ($report->report_type == 'operation') {
-                                    echo 'selected';
-                                }
-                            }
-                            ?>><?php echo lang('operation'); ?></option>
+                                                        if (!empty($report->report_type)) {
+                                                            if ($report->report_type == 'operation') {
+                                                                echo 'selected';
+                                                            }
+                                                        }
+                                                        ?>><?php echo lang('operation'); ?></option>
                             <option value="expire" <?php
-                            if (!empty($report->report_type)) {
-                                if ($report->report_type == 'expire') {
-                                    echo 'selected';
-                                }
-                            }
-                            ?>><?php echo lang('expire'); ?></option>
+                                                    if (!empty($report->report_type)) {
+                                                        if ($report->report_type == 'expire') {
+                                                            echo 'selected';
+                                                        }
+                                                    }
+                                                    ?>><?php echo lang('expire'); ?></option>
                         </select>
                     </div>
                     <div class="form-group">
 
 
                         <label for="exampleInputEmail1"><?php echo lang('description'); ?> &ast;</label>
-                        <input type="text" class="form-control" name="description"  value='' placeholder="" required="">
+                        <input type="text" class="form-control" name="description" value='' placeholder="" required="">
 
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo lang('patient'); ?> &ast;</label>
-                        <select class="form-control m-bot15" name="patient" value='' required=""> 
+                        <select class="form-control m-bot15" name="patient" value='' required="">
                             <?php foreach ($patients as $patient) { ?>
-                                <option value="<?php echo $patient->name . '*' . $patient->ion_user_id; ?>" <?php
-                                if (!empty($report->patient)) {
-                                    if (explode('*', $report->patient)[1] == $patient->ion_user_id) {
-                                        echo 'selected';
-                                    }
-                                }
-                                ?> ><?php echo $patient->name; ?> </option>
-                                    <?php } ?>
+                                <option value="<?php echo $patient->patient_id; ?>" <?php
+                                                                                    if (!empty($report->patient)) {
+                                                                                        if (explode('*', $report->patient)[1] == $patient->ion_user_id) {
+                                                                                            echo 'selected';
+                                                                                        }
+                                                                                    }
+                                                                                    ?>><?php echo $patient->name; ?> </option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo lang('doctor'); ?> &ast;</label>
-                        <select class="form-control m-bot15" name="doctor" value='' required=""> 
+                        <select class="form-control m-bot15" name="doctor" value='' required="">
                             <?php foreach ($doctors as $doctor) { ?>
                                 <option value="<?php echo $doctor->name; ?>" <?php
-                                if (!empty($report->doctor)) {
-                                    if ($report->doctor == $doctor->name) {
-                                        echo 'selected';
-                                    }
-                                }
-                                ?> ><?php echo $doctor->name; ?> </option>
-                                    <?php } ?>
+                                                                                if (!empty($report->doctor)) {
+                                                                                    if ($report->doctor == $doctor->name) {
+                                                                                        echo 'selected';
+                                                                                    }
+                                                                                }
+                                                                                ?>><?php echo $doctor->name; ?> </option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo lang('date'); ?> &ast;</label>
-                        <input class="form-control form-control-inline input-medium default-date-picker readonly" name="date"  size="16" type="text" value="" required="" />
+                        <input class="form-control form-control-inline input-medium default-date-picker readonly" name="date" size="16" type="text" value="" required="" />
 
                     </div>
                     <input type="hidden" name="id" value=''>
@@ -174,66 +173,66 @@
                         <label for="exampleInputEmail1">Select Type &ast;</label>
                         <select class="form-control m-bot15" name="type" value='' required="">
                             <option value="birth" <?php
-                            if (!empty($report->report_type)) {
-                                if ($report->report_type == 'birth') {
-                                    echo 'selected';
-                                }
-                            }
-                            ?>><?php echo lang('birth'); ?></option>
+                                                    if (!empty($report->report_type)) {
+                                                        if ($report->report_type == 'birth') {
+                                                            echo 'selected';
+                                                        }
+                                                    }
+                                                    ?>><?php echo lang('birth'); ?></option>
                             <option value="operation" <?php
-                            if (!empty($report->report_type)) {
-                                if ($report->report_type == 'operation') {
-                                    echo 'selected';
-                                }
-                            }
-                            ?>><?php echo lang('operation'); ?></option>
+                                                        if (!empty($report->report_type)) {
+                                                            if ($report->report_type == 'operation') {
+                                                                echo 'selected';
+                                                            }
+                                                        }
+                                                        ?>><?php echo lang('operation'); ?></option>
                             <option value="expire" <?php
-                            if (!empty($report->report_type)) {
-                                if ($report->report_type == 'expire') {
-                                    echo 'selected';
-                                }
-                            }
-                            ?>><?php echo lang('expire'); ?></option>
+                                                    if (!empty($report->report_type)) {
+                                                        if ($report->report_type == 'expire') {
+                                                            echo 'selected';
+                                                        }
+                                                    }
+                                                    ?>><?php echo lang('expire'); ?></option>
                         </select>
                     </div>
                     <div class="form-group">
 
 
                         <label for="exampleInputEmail1"><?php echo lang('description'); ?> &ast;</label>
-                        <input type="text" class="form-control" name="description"  value='' placeholder="" required="">
+                        <input type="text" class="form-control" name="description" value='' placeholder="" required="">
 
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo lang('patient'); ?> &ast;</label>
-                        <select class="form-control m-bot15" name="patient" value='' required=""> 
+                        <select class="form-control m-bot15" name="patient" value='' required="">
                             <?php foreach ($patients as $patient) { ?>
                                 <option value="<?php echo $patient->name . '*' . $patient->ion_user_id; ?>" <?php
-                                if (!empty($report->patient)) {
-                                    if (explode('*', $report->patient)[1] == $patient->ion_user_id) {
-                                        echo 'selected';
-                                    }
-                                }
-                                ?> ><?php echo $patient->name; ?> </option>
-                                    <?php } ?>
+                                                                                                            if (!empty($report->patient)) {
+                                                                                                                if (explode('*', $report->patient)[1] == $patient->ion_user_id) {
+                                                                                                                    echo 'selected';
+                                                                                                                }
+                                                                                                            }
+                                                                                                            ?>><?php echo $patient->name; ?> </option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo lang('doctor'); ?> &ast;</label>
-                        <select class="form-control m-bot15" name="doctor" value='' required=""> 
+                        <select class="form-control m-bot15" name="doctor" value='' required="">
                             <?php foreach ($doctors as $doctor) { ?>
                                 <option value="<?php echo $doctor->name; ?>" <?php
-                                if (!empty($report->doctor)) {
-                                    if ($report->doctor == $doctor->name) {
-                                        echo 'selected';
-                                    }
-                                }
-                                ?> ><?php echo $doctor->name; ?> </option>
-                                    <?php } ?>
+                                                                                if (!empty($report->doctor)) {
+                                                                                    if ($report->doctor == $doctor->name) {
+                                                                                        echo 'selected';
+                                                                                    }
+                                                                                }
+                                                                                ?>><?php echo $doctor->name; ?> </option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1"><?php echo lang('date'); ?> &ast;</label>
-                        <input class="form-control form-control-inline input-medium default-date-picker readonly" name="date"  size="16" type="text" value=""  required=""/>
+                        <input class="form-control form-control-inline input-medium default-date-picker readonly" name="date" size="16" type="text" value="" required="" />
 
                     </div>
                     <input type="hidden" name="id" value=''>
@@ -250,5 +249,7 @@
 <!-- Edit Birth Report Modal-->
 
 <script src="common/js/codearistos.min.js"></script>
-<script type="text/javascript">var language = "<?php echo $this->language; ?>";</script>
+<script type="text/javascript">
+    var language = "<?php echo $this->language; ?>";
+</script>
 <script src="common/extranal/js/report/birth_report.js"></script>
