@@ -29,7 +29,7 @@ $(document).ready(function () {
     placeholder: select_patient,
     allowClear: true,
     ajax: {
-      url: "patient/getPatientinfoWithAddNewOption",
+      url: "patient/getPatientinfo",
       type: "post",
       dataType: "json",
       delay: 250,
@@ -52,7 +52,7 @@ $(document).ready(function () {
     placeholder: select_patient,
     allowClear: true,
     ajax: {
-      url: "patient/getPatientinfoWithAddNewOption",
+      url: "patient/getPatientinfo",
       type: "post",
       dataType: "json",
       delay: 250,
@@ -120,15 +120,6 @@ $(document).ready(function () {
   });
 });
 
-
-
-
-
-
-
-
-
-
 $(document).ready(function () {
   $("#visit_description").change(function () {
     var id = $(this).val();
@@ -155,7 +146,6 @@ $(document).ready(function () {
   });
 });
 
-
 $(document).ready(function () {
   $("#visit_description1").change(function () {
     var id = $(this).val();
@@ -164,7 +154,7 @@ $(document).ready(function () {
       url: "doctor/getDoctorVisitCharges?id=" + id,
       method: "GET",
       dataType: "json",
-      success: function(response) {
+      success: function (response) {
         $("#visit_charges1").val(response.response.visit_charges).end();
         var discount = $("#discount1").val();
         $("#grand_total1")
@@ -181,11 +171,6 @@ $(document).ready(function () {
       .end();
   });
 });
-
-
-
-
-
 
 function cardValidation() {
   "use strict";
@@ -344,8 +329,8 @@ if (payment_gateway == "2Checkout") {
 
     $("#addAppointmentForm").append(
       "<input type='hidden' name='token' value='" +
-      data.response.token.token +
-      "' />"
+        data.response.token.token +
+        "' />"
     );
 
     myForm.submit();
@@ -399,8 +384,8 @@ if (payment_gateway == "2Checkout") {
 
     $("#editAppointmentForm").append(
       "<input type='hidden' name='token' value='" +
-      data.response.token.token +
-      "' />"
+        data.response.token.token +
+        "' />"
     );
 
     myForm.submit();
@@ -430,11 +415,11 @@ if (payment_gateway == "2Checkout") {
     };
     console.log(
       $("#card1").val() +
-      "-" +
-      $("#cvv1").val() +
-      expiresep[0] +
-      year +
-      merchant
+        "-" +
+        $("#cvv1").val() +
+        expiresep[0] +
+        year +
+        merchant
     );
 
     TCO.requestToken(successCallback, errorCallback, args);

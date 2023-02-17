@@ -773,7 +773,7 @@ $(document).ready(function () {
     placeholder: select_patient,
     allowClear: true,
     ajax: {
-      url: "patient/getPatientinfoWithAddNewOption",
+      url: "patient/getPatientinfo",
       type: "post",
       dataType: "json",
       delay: 250,
