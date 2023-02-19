@@ -1265,13 +1265,10 @@ class Patient extends MX_Controller
 
     function delete()
     {
-        $data = array();
+        // $data = array();
         $id = $this->input->get('id');
+        logToConsoleFile('delete');
 
-        $patient_hospital_id = $this->patient_model->getPatientById($id)->hospital_id;
-        if ($patient_hospital_id != $this->session->userdata('hospital_id')) {
-            redirect('home/permission');
-        }
 
         $user_data = $this->db->get_where('patient', array('id' => $id))->row();
         $path = $user_data->img_url;
@@ -1279,10 +1276,19 @@ class Patient extends MX_Controller
         if (!empty($path)) {
             unlink($path);
         }
-        $ion_user_id = $user_data->ion_user_id;
-        $this->db->where('id', $ion_user_id);
-        $this->db->delete('users');
-        $this->patient_model->delete($id);
+        $this->db->where('patient_id', $id);
+        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->delete('patients_hospitals');
+
+        // $patient_hospital_id = $this->patient_model->getPatientById($id)->hospital_id;
+        // if ($patient_hospital_id != $this->session->userdata('hospital_id')) {
+        //     redirect('home/permission');
+        // }
+
+        // $ion_user_id = $user_data->ion_user_id;
+        // $this->db->where('id', $ion_user_id);
+        // $this->db->delete('users');
+        // $this->patient_model->delete($id);
         $this->session->set_flashdata('feedback', lang('deleted'));
         redirect('patient');
     }
