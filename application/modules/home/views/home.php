@@ -118,7 +118,7 @@
                                             <h3 class="">
                                                 <?php
                                                 $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-                                                $this->db->from('patient');
+                                                $this->db->from('patients_hospitals');
                                                 $count = $this->db->count_all_results();
                                                 echo $count;
                                                 ?>
@@ -854,7 +854,6 @@ if (!$this->ion_auth->in_group(array('superadmin'))) {
     var oct = '<?php echo lang('oct'); ?>';
     var nov = '<?php echo lang('nov'); ?>';
     var dec = '<?php echo lang('dec'); ?>';
-
 </script>
 
 <script src="common/extranal/js/home.js"></script>

@@ -313,8 +313,8 @@
                                     <span class="badge bg-warning">
                                         <?php
                                         $this->db->where('hospital_id', $this->hospital_id);
-                                        $this->db->where('add_date', date('m/d/y'));
-                                        $query = $this->db->get('patient');
+                                        // $this->db->where('add_date', date('m/d/y'));
+                                        $query = $this->db->get('patients_hospitals');
                                         $query = $query->result();
                                         foreach ($query as $patient) {
                                             $patient_number[] = '1';

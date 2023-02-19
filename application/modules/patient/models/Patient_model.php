@@ -496,11 +496,19 @@ class Patient_model extends CI_model
     function getSystemPatients($searchTerm)
     {
         if (!empty($searchTerm)) {
+            // $this->db->select('*');
+            // $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+            // $this->db->where("name like '%" . $searchTerm . "%' OR id like '%" . $searchTerm . "%' OR phone like '%" . $searchTerm . "%'");
+            // $fetched_records = $this->db->get('patient');
+            // $users = $fetched_records->result_array();
             $this->db->select('*');
-            $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-            $this->db->where("name like '%" . $searchTerm . "%' OR id like '%" . $searchTerm . "%' OR phone like '%" . $searchTerm . "%'");
-            $fetched_records = $this->db->get('patient');
-            $users = $fetched_records->result_array();
+            $this->db->from('patient');
+            $this->db->join('patients_hospitals', 'patient.id = patients_hospitals.patient_id');
+            $this->db->where('patients_hospitals.hospital_id !=', $this->session->userdata('hospital_id'));
+            $this->db->where("(patient.id LIKE '%" . $searchTerm . "%' OR patient.name LIKE '%" . $searchTerm . "%' OR patient.phone LIKE '%" . $searchTerm . "%' OR patient.address LIKE '%" . $searchTerm . "%')", NULL, FALSE);
+            $query = $this->db->get();
+
+            $users = $query->result_array();
         } else {
             // $this->db->select('*');
             // $this->db->where('hospital_id', $this->session->userdata('hospital_id'));

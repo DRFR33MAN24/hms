@@ -66,12 +66,12 @@ class Patient extends MX_Controller
     public function addExisting()
     {
         $id = $this->input->post('patient');
-
-        $patient = $this->db->get_where('patients_hospitals', array('id' => $id))->row();
+        log_message('error', $id);
+        // $patient = $this->db->get_where('patients_hospitals', array('id' => $id))->row();
         // log_message('error', $patient_id);
         $sql = "INSERT INTO patients_hospitals (patient_id, hospital_id)
         VALUES (?, ?);";
-        $this->db->query($sql, array($patient->patient_id, $this->session->userdata('hospital_id')));
+        $this->db->query($sql, array($id, $this->session->userdata('hospital_id')));
         redirect('patient');
     }
     public function addNew()
@@ -321,6 +321,10 @@ class Patient extends MX_Controller
                         $this->email->send();
                     }
 
+                    $this->db->where('email', $email);
+                    $join_id = $this->db->get('patient')->row()->id;
+                    $this->db->insert('patients_hospitals', array('patient_id' => $join_id, 'hospital_id' =>
+                    $this->session->userdata('hospital_id')));
 
 
 
@@ -1267,7 +1271,7 @@ class Patient extends MX_Controller
     {
         // $data = array();
         $id = $this->input->get('id');
-        logToConsoleFile('delete');
+
 
 
         $user_data = $this->db->get_where('patient', array('id' => $id))->row();
