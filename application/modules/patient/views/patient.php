@@ -16,8 +16,10 @@
                         </div>
                     </a>
                     <a data-toggle="modal" href="#myModal3">
-                        <div class="btn-group pull-right">
-                            <button id="" class="btn green btn-xs">
+                        <div class="btn-group pull-right" style="
+    margin-inline: 10px;
+">
+                            <button id="" class="btn green btn-xs ">
                                 <i class="fa fa-plus-circle"></i> <?php echo lang('add_existing'); ?>
                             </button>
                         </div>
@@ -421,7 +423,7 @@
                         <div class="">
                             <div class="fileupload fileupload-new" data-provides="fileupload">
                                 <div class="fileupload-new thumbnail img_class">
-
+                                    <img src="" id="img1" alt="" />
                                 </div>
                                 <div class="fileupload-preview fileupload-exists thumbnail img_thumb"></div>
                             </div>

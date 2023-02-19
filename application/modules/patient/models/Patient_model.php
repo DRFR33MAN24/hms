@@ -503,9 +503,8 @@ class Patient_model extends CI_model
             // $users = $fetched_records->result_array();
             $this->db->select('*');
             $this->db->from('patient');
-            $this->db->join('patients_hospitals', 'patient.id = patients_hospitals.patient_id');
-            $this->db->where('patients_hospitals.hospital_id !=', $this->session->userdata('hospital_id'));
-            $this->db->where("(patient.id LIKE '%" . $searchTerm . "%' OR patient.name LIKE '%" . $searchTerm . "%' OR patient.phone LIKE '%" . $searchTerm . "%' OR patient.address LIKE '%" . $searchTerm . "%')", NULL, FALSE);
+
+            $this->db->where("(id LIKE '%" . $searchTerm . "%' OR name LIKE '%" . $searchTerm . "%' OR phone LIKE '%" . $searchTerm . "%' OR address LIKE '%" . $searchTerm . "%')", NULL, FALSE);
             $query = $this->db->get();
 
             $users = $query->result_array();
@@ -519,14 +518,21 @@ class Patient_model extends CI_model
             $sql = "SELECT *
             
         FROM patient
-        JOIN patients_hospitals ON patient.id = patients_hospitals.patient_id
-        WHERE patients_hospitals.hospital_id != ?";
-            $fetched_records = $this->db->query($sql, array($this->session->userdata('hospital_id')));
+        
+        ";
+            $fetched_records = $this->db->query($sql);
             $users = $fetched_records->result_array();
         }
         // Initialize Array with fetched data
         $data = array();
         foreach ($users as $user) {
+            $this->db->select("*");
+            $this->db->from('patients_hospitals');
+
+            $this->db->where(array("hospital_id" => $this->session->userdata('hospital_id'), "patient_id" =>
+            $user['id']));
+            $patient_num = $this->db->count_all_results();
+            log_message('error', json_encode($patient_num));
             if (empty($user['age'])) {
                 $dateOfBirth = $user['birthdate'];
                 if (empty($dateOfBirth)) {
@@ -543,7 +549,10 @@ class Patient_model extends CI_model
             } else {
                 $age = explode('-', $user['age']);
             }
-            $data[] = array("id" => $user['id'], "text" => $user['name'] . ' (' . lang('id') . ': ' . $user['id'] . '- ' . lang('phone') . ': ' . $user['phone'] . '- ' . lang('age') . ': ' . $age[0] . ' years )');
+            if ($patient_num == 0) {
+                # code...
+                $data[] = array("id" => $user['id'], "text" => $user['name'] . ' (' . lang('id') . ': ' . $user['id'] . '- ' . lang('phone') . ': ' . $user['phone'] . '- ' . lang('age') . ': ' . $age[0] . ' years )');
+            }
         }
         return $data;
     }
