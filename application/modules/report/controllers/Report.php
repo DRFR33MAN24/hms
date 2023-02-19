@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Report extends MX_Controller {
+class Report extends MX_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->model('report_model');
         $this->load->model('doctor/doctor_model');
@@ -15,17 +17,19 @@ class Report extends MX_Controller {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
         $data['reports'] = $this->report_model->getReport();
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('birth_report', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    function birth() {
+    function birth()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
@@ -36,12 +40,13 @@ class Report extends MX_Controller {
         $data['patients'] = $this->patient_model->getPatient();
         $data['doctors'] = $this->doctor_model->getDoctor();
         $data['reports'] = $this->report_model->getReportByType($type);
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('birth_report', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    function operation() {
+    function operation()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
@@ -52,12 +57,13 @@ class Report extends MX_Controller {
         $data['patients'] = $this->patient_model->getPatient();
         $data['doctors'] = $this->doctor_model->getDoctor();
         $data['reports'] = $this->report_model->getReportByType($type);
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('operation_report', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    function expire() {
+    function expire()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
@@ -68,24 +74,26 @@ class Report extends MX_Controller {
         $data['patients'] = $this->patient_model->getPatient();
         $data['doctors'] = $this->doctor_model->getDoctor();
         $data['reports'] = $this->report_model->getReportByType($type);
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('expire_report', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    public function addReportView() {
+    public function addReportView()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
         $data = array();
         $data['doctors'] = $this->doctor_model->getDoctor();
         $data['patients'] = $this->patient_model->getPatient();
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('add_report', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    public function addReport() {
+    public function addReport()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
@@ -115,21 +123,22 @@ class Report extends MX_Controller {
 
 
         if ($this->form_validation->run() == FALSE) {
-            if(!empty($id)){
+            if (!empty($id)) {
                 $this->session->set_flashdata('feedback', lang('validation_error'));
-                redirect('report/editReport?id'.$id);
-            }else{
-            $data = array();
-            $data['setval'] = 'setval';
-            $data['doctors'] = $this->doctor_model->getDoctor();
-            $data['patients'] = $this->patient_model->getPatient();
-            $this->load->view('home/dashboard'); 
-            $this->load->view('add_report', $data);
-            $this->load->view('home/footer'); 
+                redirect('report/editReport?id' . $id);
+            } else {
+                $data = array();
+                $data['setval'] = 'setval';
+                $data['doctors'] = $this->doctor_model->getDoctor();
+                $data['patients'] = $this->patient_model->getPatient();
+                $this->load->view('home/dashboard');
+                $this->load->view('add_report', $data);
+                $this->load->view('home/footer');
             }
         } else {
             $data = array();
-            $data = array('report_type' => $type,
+            $data = array(
+                'report_type' => $type,
                 'description' => $description,
                 'patient' => $patient,
                 'doctor' => $doctor,
@@ -137,7 +146,7 @@ class Report extends MX_Controller {
                 'add_date' => $add_date
             );
             if (empty($id)) {
-                $this->report_model->insertReport($data); 
+                $this->report_model->insertReport($data);
                 $this->session->set_flashdata('feedback', lang('added'));
             } else {
                 $this->report_model->updateReport($id, $data);
@@ -153,7 +162,8 @@ class Report extends MX_Controller {
         }
     }
 
-    function editReport() {
+    function editReport()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
@@ -162,18 +172,20 @@ class Report extends MX_Controller {
         $data['patients'] = $this->patient_model->getPatient();
         $id = $this->input->get('id');
         $data['report'] = $this->report_model->getReportById($id);
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('add_report', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
-    
-    function editReportByJason(){
+
+    function editReportByJason()
+    {
         $id = $this->input->get('id');
         $data['report'] = $this->report_model->getReportById($id);
         echo json_encode($data);
     }
 
-    function myReport() {
+    function myReport()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             $data = array();
             $id = $this->ion_auth->get_user_id();
@@ -181,15 +193,17 @@ class Report extends MX_Controller {
         }
     }
 
-    function myreports() {
+    function myreports()
+    {
         $data['reports'] = $this->report_model->getReport();
         $data['user_id'] = $this->ion_auth->user()->row()->id;
-        $this->load->view('home/dashboard'); 
+        $this->load->view('home/dashboard');
         $this->load->view('myreports', $data);
-        $this->load->view('home/footer'); 
+        $this->load->view('home/footer');
     }
 
-    function delete() {
+    function delete()
+    {
         if ($this->ion_auth->in_group('Patient')) {
             redirect('home/permission');
         }
@@ -205,7 +219,6 @@ class Report extends MX_Controller {
             redirect('report/expire');
         }
     }
-
 }
 
 /* End of file report.php */

@@ -76,6 +76,7 @@ class Finance extends MX_Controller
 
     public function addPayment()
     {
+
         $form_submit = $this->input->post('form_submit');
         if ($form_submit == 'save_as_draft') {
             $draft_id = $this->input->post('draft_id');
@@ -107,6 +108,7 @@ class Finance extends MX_Controller
             }
 
             $patient = $this->input->post('patient');
+
 
             $p_name = $this->input->post('p_name');
             $p_email = $this->input->post('p_email');

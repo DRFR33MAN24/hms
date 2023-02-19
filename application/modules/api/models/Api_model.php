@@ -264,10 +264,11 @@ class Api_model extends CI_model
 
     function getPatientLabReport($userId)
     {
+        logToConsoleFile($userId);
         // $this->db->where('hospital_id', $hospitalID);
         $this->db->where('patient', $userId);
         $this->db->order_by('id', 'desc');
-        $query = $this->db->get('report');
+        $query = $this->db->get('lab');
         return $query->result();
     }
 
@@ -356,9 +357,9 @@ class Api_model extends CI_model
         return $query->row();
     }
 
-    function getPrescriptionById($id, $hospitalID)
+    function getPrescriptionById($id)
     {
-        $this->db->where('hospital_id', $hospitalID);
+        // $this->db->where('hospital_id', $hospitalID);
         $this->db->where('id', $id);
         $query = $this->db->get('prescription');
         return $query->row();
@@ -955,9 +956,9 @@ class Api_model extends CI_model
         return $users;
     }
 
-    function getMedicineById($id, $hospitalId)
+    function getMedicineById($id)
     {
-        $this->db->where('hospital_id', $hospitalId);
+        // $this->db->where('hospital_id', $hospitalId);
         $this->db->where('id', $id);
         $query = $this->db->get('medicine');
         return $query->row();

@@ -373,7 +373,7 @@ class Api extends MX_Controller
         $name = $this->input->post('name');
         $password = $this->input->post('password');
         $email = $this->input->post('email');
-
+        logToConsoleFile($id);
 
         $data['profile'] = $this->api_model->apiGetProfileById($id);
         if ($data['profile']->email != $email) {
@@ -427,9 +427,10 @@ class Api extends MX_Controller
         logToConsoleFile('createPatientProfile');
 
         $ion_id = $this->input->post('id');
+        $edit = $this->input - post('edit');
         $email = $this->db->get_where('users', array('id' => $ion_id))->row()->email;
         $name = $this->input->post('name');
-
+        $age = $this->input->post('age');
         $address = $this->input->post('address');
         $phone = $this->input->post('phone');
         $sex = $this->input->post('sex');
@@ -455,7 +456,7 @@ class Api extends MX_Controller
             $months = $diff->format('%m');
             $days = $diff->format('%d');
         }
-        $age = $years . '-' . $months . '-' . $days;
+        $birthdate = $years . '-' . $months . '-' . $days;
         $bloodgroup = $this->input->post('bloodgroup');
         // validate data from null and mis-type
         $this->load->library('form_validation');
@@ -540,7 +541,13 @@ class Api extends MX_Controller
                     'age' => $age
                 );
             }
-            $this->patient_model->insertPatient($data);
+            if ($edit == 'new') {
+
+                $this->patient_model->insertPatient($data);
+            } else {
+                $this->patient_model->updatePatientByEmail($email, $data);
+            }
+
             $data = 'success';
             logToConsoleFile('successfully added patient');
             echo json_encode($data);
@@ -885,20 +892,17 @@ class Api extends MX_Controller
     function viewPrescription()
     {
         $userId = $this->input->post('user_ion_id');
-        $this->hospitalID = $this->getHospitalID($userId);
+        // $this->hospitalID = $this->getHospitalID($userId);
         $id = $this->input->post('id');
-        $data['prescription'] = $this->api_model->getPrescriptionById($id, $this->hospitalID);
+        logToConsoleFile($id);
+        $data['prescription'] = $this->api_model->getPrescriptionById($id);
         if (!empty($data['prescription']->hospital_id)) {
-            if ($data['prescription']->hospital_id != $this->hospitalID) {
-                $data['message'] = 'invalid';
-                echo json_encode($data);
-            } else {
-                $data['settings'] = $this->api_model->getSettings($this->hospitalID);
-                $data['doctor'] = $this->api_model->getDoctorById($data['prescription']->doctor, $this->hospitalID);
-                $data['user'] = $this->api_model->getPatientById($data['prescription']->patient, $this->hospitalID);
-                $data['message'] = 'successful';
-                echo json_encode($data);
-            }
+
+            $data['settings'] = $this->api_model->getSettings($data['prescription']->hospitalID);
+            $data['doctor'] = $this->api_model->getDoctorById($data['prescription']->doctor, $data['prescription']->hospitalID);
+            $data['user'] = $this->api_model->getPatientById($data['prescription']->patient, $data['prescription']->hospitalID);
+            $data['message'] = 'successful';
+            echo json_encode($data);
         } else {
             $data['message'] = 'failed';
             echo json_encode($data);
@@ -3042,9 +3046,9 @@ class Api extends MX_Controller
     function getMedicineById()
     {
         $id = $this->input->post('id');
-        $ion_id = $this->input->post('ion_id');
-        $this->hospitalID = $this->getHospitalID($ion_id);
-        $data = $this->api_model->getMedicineById($id, $this->hospitalID);
+        //$ion_id = $this->input->post('ion_id');
+        //$this->hospitalID = $this->getHospitalID($ion_id);
+        $data = $this->api_model->getMedicineById($id);
         echo json_encode($data);
     }
 

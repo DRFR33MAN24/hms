@@ -21,6 +21,7 @@ class Patient_model extends CI_model
 
     function addExistingPatient($data)
     {
+
         $data1 = array('hospital_id' => $this->session->userdata('hospital_id'));
         $data2 = array_merge($data, $data1);
         $this->db->insert('patients_hospitals', $data2);
@@ -167,11 +168,11 @@ class Patient_model extends CI_model
         // return $query->row();
 
 
-        $this->db->where('id', $id);
-        $query = $this->db->get('patients_hospitals');
-        $patient_id = $query->row()->{'patient_id'};
+        // $this->db->where('id', $id);
+        // $query = $this->db->get('patients_hospitals');
+        // $patient_id = $query->row()->{'patient_id'};
 
-        $this->db->where('id', $patient_id);
+        $this->db->where('id', $id);
         $query = $this->db->get('patient');
         return $query->row();
     }
@@ -195,6 +196,12 @@ class Patient_model extends CI_model
     function updatePatient($id, $data)
     {
         $this->db->where('id', $id);
+        $this->db->update('patient', $data);
+    }
+
+    function updatePatientByEmail($email, $data)
+    {
+        $this->db->where('email', $email);
         $this->db->update('patient', $data);
     }
 
