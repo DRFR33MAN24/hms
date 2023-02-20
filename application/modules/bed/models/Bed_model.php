@@ -124,6 +124,14 @@ class Bed_model extends CI_model
         return $query->result();
     }
 
+    function getBedAllotmentsByPatientIdForPatient($id)
+    {
+        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where('patient', $id);
+        $query = $this->db->get('alloted_bed');
+        return $query->result();
+    }
+
     function getBedCategoryById($id)
     {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));

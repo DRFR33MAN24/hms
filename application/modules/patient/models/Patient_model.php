@@ -226,6 +226,14 @@ class Patient_model extends CI_model
         return $query->result();
     }
 
+    function getMedicalHistoryByPatientIdForPatient($id)
+    {
+        //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where('patient_id', $id);
+        $query = $this->db->get('medical_history');
+        return $query->result();
+    }
+
     function getMedicalHistory()
     {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -405,6 +413,14 @@ class Patient_model extends CI_model
     function getPatientMaterialByPatientId($id)
     {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where('patient', $id);
+        $query = $this->db->get('patient_material');
+        return $query->result();
+    }
+
+    function getPatientMaterialByPatientIdForPatient($id)
+    {
+        //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('patient', $id);
         $query = $this->db->get('patient_material');
         return $query->result();
@@ -692,6 +708,14 @@ class Patient_model extends CI_model
         return $query->result();
     }
 
+    function getFolderByPatientIdForPatient($id)
+    {
+        //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where('patient', $id);
+        $query = $this->db->get('folder');
+        return $query->result();
+    }
+
     function getPatientMaterialByFolderId($id)
     {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -744,6 +768,14 @@ class Patient_model extends CI_model
     function getVitalSignByPatientId($id)
     {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where('patient_id', $id);
+        $query = $this->db->get('vital_signs');
+        return $query->result();
+    }
+
+    function getVitalSignByPatientIdForPatient($id)
+    {
+        //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('patient_id', $id);
         $query = $this->db->get('vital_signs');
         return $query->result();

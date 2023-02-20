@@ -3,27 +3,32 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Lab_model extends CI_model {
+class Lab_model extends CI_model
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->database();
     }
 
-    function insertLab($data) {
+    function insertLab($data)
+    {
         $data1 = array('hospital_id' => $this->session->userdata('hospital_id'));
         $data2 = array_merge($data, $data1);
         $this->db->insert('lab', $data2);
     }
 
-    function getLab() {
+    function getLab()
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('lab');
         return $query->result();
     }
 
-    function getLabWithoutSearch($order, $dir) {
+    function getLabWithoutSearch($order, $dir)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         if ($order != null) {
             $this->db->order_by($order, $dir);
@@ -34,22 +39,24 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabBySearch($search, $order, $dir) {
+    function getLabBySearch($search, $order, $dir)
+    {
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
             $this->db->order_by('id', 'desc');
         }
         $query = $this->db->select('*')
-                ->from('lab')
-                ->where('hospital_id', $this->session->userdata('hospital_id'))
-                ->where("(id LIKE '%" . $search . "%' OR patient_name LIKE '%" . $search . "%' OR patient_phone LIKE '%" . $search . "%' OR patient_address LIKE '%" . $search . "%'OR doctor_name LIKE '%" . $search . "%'OR date_string LIKE '%" . $search . "%')", NULL, FALSE)
-                ->get();
+            ->from('lab')
+            ->where('hospital_id', $this->session->userdata('hospital_id'))
+            ->where("(id LIKE '%" . $search . "%' OR patient_name LIKE '%" . $search . "%' OR patient_phone LIKE '%" . $search . "%' OR patient_address LIKE '%" . $search . "%'OR doctor_name LIKE '%" . $search . "%'OR date_string LIKE '%" . $search . "%')", NULL, FALSE)
+            ->get();
 
         return $query->result();
     }
 
-    function getLabByLimit($limit, $start, $order, $dir) {
+    function getLabByLimit($limit, $start, $order, $dir)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         if ($order != null) {
             $this->db->order_by($order, $dir);
@@ -61,7 +68,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByLimitBySearch($limit, $start, $search, $order, $dir) {
+    function getLabByLimitBySearch($limit, $start, $search, $order, $dir)
+    {
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -69,19 +77,20 @@ class Lab_model extends CI_model {
         }
         $this->db->limit($limit, $start);
         $query = $this->db->select('*')
-                ->from('lab')
-                ->where('hospital_id', $this->session->userdata('hospital_id'))
-                ->where("(id LIKE '%" . $search . "%' OR patient_name LIKE '%" . $search . "%' OR patient_phone LIKE '%" . $search . "%' OR patient_address LIKE '%" . $search . "%'OR doctor_name LIKE '%" . $search . "%'OR date_string LIKE '%" . $search . "%')", NULL, FALSE)
-                ->get();
+            ->from('lab')
+            ->where('hospital_id', $this->session->userdata('hospital_id'))
+            ->where("(id LIKE '%" . $search . "%' OR patient_name LIKE '%" . $search . "%' OR patient_phone LIKE '%" . $search . "%' OR patient_address LIKE '%" . $search . "%'OR doctor_name LIKE '%" . $search . "%'OR date_string LIKE '%" . $search . "%')", NULL, FALSE)
+            ->get();
 
         return $query->result();
     }
 
-    function getTemplateCount($user_id, $category) {
-        if(trim($user_id)) {
+    function getTemplateCount($user_id, $category)
+    {
+        if (trim($user_id)) {
             $this->db->where('user', $user_id);
         }
-        if(trim($category)) {
+        if (trim($category)) {
             $this->db->where('x', $category);
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -90,12 +99,13 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getTemplateWithoutSearch($order, $dir, $user_id, $category) {
+    function getTemplateWithoutSearch($order, $dir, $user_id, $category)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        if(trim($user_id)) {
+        if (trim($user_id)) {
             $this->db->where('user', $user_id);
         }
-        if(trim($category)) {
+        if (trim($category)) {
             $this->db->where('category_id', $category);
         }
         if ($order != null) {
@@ -107,56 +117,19 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getTemplateBySearch($search, $order, $dir, $user_id, $category) {
+    function getTemplateBySearch($search, $order, $dir, $user_id, $category)
+    {
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
             $this->db->order_by('id', 'desc');
         }
-        if(trim($user_id)) {
+        if (trim($user_id)) {
             $this->db->where('user', $user_id);
         }
-        if(trim($category)) {
+        if (trim($category)) {
             $this->db->where('category_id', $category);
         }
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        $this->db->where("(id LIKE '%" . $search . "%' OR name LIKE '%" . $search . "%')", NULL, FALSE);
-        $query = $this->db->get('template');
-
-        return $query->result();
-    }
-
-    function getTemplateByLimit($limit, $start, $order, $dir, $user_id, $category) {
-        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        if ($order != null) {
-            $this->db->order_by($order, $dir);
-        } else {
-            $this->db->order_by('id', 'desc');
-        }
-        if(trim($user_id)) {
-            $this->db->where('user', $user_id);
-        }
-        if(trim($category)) {
-            $this->db->where('category_id', $category);
-        }
-        $this->db->limit($limit, $start);
-        $query = $this->db->get('template');
-        return $query->result();
-    }
-
-    function getTemplateByLimitBySearch($limit, $start, $search, $order, $dir, $user_id, $category) {
-        if ($order != null) {
-            $this->db->order_by($order, $dir);
-        } else {
-            $this->db->order_by('id', 'desc');
-        }
-        if(trim($user_id)) {
-            $this->db->where('user', $user_id);
-        }
-        if(trim($category)) {
-            $this->db->where('category_id', $category);
-        }
-        $this->db->limit($limit, $start);
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where("(id LIKE '%" . $search . "%' OR name LIKE '%" . $search . "%')", NULL, FALSE);
         $query = $this->db->get('template');
@@ -164,7 +137,48 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function changeTestStatus($id, $status, $done_by) {
+    function getTemplateByLimit($limit, $start, $order, $dir, $user_id, $category)
+    {
+        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        if ($order != null) {
+            $this->db->order_by($order, $dir);
+        } else {
+            $this->db->order_by('id', 'desc');
+        }
+        if (trim($user_id)) {
+            $this->db->where('user', $user_id);
+        }
+        if (trim($category)) {
+            $this->db->where('category_id', $category);
+        }
+        $this->db->limit($limit, $start);
+        $query = $this->db->get('template');
+        return $query->result();
+    }
+
+    function getTemplateByLimitBySearch($limit, $start, $search, $order, $dir, $user_id, $category)
+    {
+        if ($order != null) {
+            $this->db->order_by($order, $dir);
+        } else {
+            $this->db->order_by('id', 'desc');
+        }
+        if (trim($user_id)) {
+            $this->db->where('user', $user_id);
+        }
+        if (trim($category)) {
+            $this->db->where('category_id', $category);
+        }
+        $this->db->limit($limit, $start);
+        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->where("(id LIKE '%" . $search . "%' OR name LIKE '%" . $search . "%')", NULL, FALSE);
+        $query = $this->db->get('template');
+
+        return $query->result();
+    }
+
+    function changeTestStatus($id, $status, $done_by)
+    {
         if ($status == 'done') {
             $data = array(
                 'test_status' => "done",
@@ -183,8 +197,9 @@ class Lab_model extends CI_model {
         $this->db->where("id", $id);
         $this->db->update("lab", $data);
     }
-    
-    function changeReportStatus($id, $status) {
+
+    function changeReportStatus($id, $status)
+    {
         if ($status == 'completed') {
             $data = array(
                 'status' => "completed",
@@ -200,12 +215,14 @@ class Lab_model extends CI_model {
         $this->db->update("lab", $data);
     }
 
-    function changeDeliveryStatus($id, $data) {
+    function changeDeliveryStatus($id, $data)
+    {
         $this->db->where("id", $id);
         $this->db->update("lab", $data);
     }
-    
-    function getTestStatusLab($status, $category, $from, $to) {
+
+    function getTestStatusLab($status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -223,12 +240,12 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-       
 
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -245,7 +262,7 @@ class Lab_model extends CI_model {
 
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else  if(count($array) == 0){
+        } else  if (count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
@@ -253,7 +270,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getTestStatusLabWithoutSearch($order, $dir, $status, $category, $from, $to) {
+    function getTestStatusLabWithoutSearch($order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -271,11 +289,11 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -292,7 +310,7 @@ class Lab_model extends CI_model {
 
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else  if($category != 'all' && count($array) == 0){
+        } else  if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
         if ($order != null) {
@@ -304,7 +322,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getTestStatusLabBySearch($search, $order, $dir, $status, $category, $from, $to) {
+    function getTestStatusLabBySearch($search, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -342,15 +361,15 @@ class Lab_model extends CI_model {
 
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else  if($category != 'all' && count($array) == 0){
+        } else  if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
         $this->db->select('*');
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -359,7 +378,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getTestStatusLabByLimit($limit, $start, $order, $dir, $status, $category, $from, $to) {
+    function getTestStatusLabByLimit($limit, $start, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -378,10 +398,10 @@ class Lab_model extends CI_model {
             }
         }
 
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -398,7 +418,7 @@ class Lab_model extends CI_model {
 
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else  if($category != 'all' && count($array) == 0){
+        } else  if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
@@ -412,7 +432,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getTestStatusLabByLimitBySearch($limit, $start, $search, $order, $dir, $status, $category, $from, $to) {
+    function getTestStatusLabByLimitBySearch($limit, $start, $search, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -430,7 +451,7 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -447,19 +468,19 @@ class Lab_model extends CI_model {
             $this->db->where('test_status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
         $this->db->limit($limit, $start);
         $this->db->select('*');
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -468,7 +489,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabReport($status, $category, $from, $to) {
+    function getLabReport($status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -486,11 +508,11 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -507,10 +529,10 @@ class Lab_model extends CI_model {
             $this->db->where('status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
@@ -518,7 +540,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabReportWithoutSearch($order, $dir, $status, $category, $from, $to) {
+    function getLabReportWithoutSearch($order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -536,11 +559,11 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         if ($order != null) {
@@ -562,20 +585,21 @@ class Lab_model extends CI_model {
             $this->db->where('status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
-        
-      
+
+
         $query = $this->db->get('lab');
         return $query->result();
     }
 
-    function getLabReportBySearch($search, $order, $dir, $status, $category, $from, $to) {
+    function getLabReportBySearch($search, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -593,7 +617,7 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -613,19 +637,19 @@ class Lab_model extends CI_model {
             $this->db->where('status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
         $this->db->select('*');
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where("(id LIKE '%" . $search . "%' OR invoice_id LIKE '%" . $search . "%' OR patient LIKE '%" . $search . "%' OR patient_name LIKE '%" . $search . "%' OR patient_phone LIKE '%" . $search . "%' OR patient_address LIKE '%" . $search . "%'OR doctor_name LIKE '%" . $search . "%'OR date_string LIKE '%" . $search . "%')", NULL, FALSE);
@@ -633,7 +657,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabReportByLimit($limit, $start, $order, $dir, $status, $category, $from, $to) {
+    function getLabReportByLimit($limit, $start, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -651,21 +676,21 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
-         
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
             $this->db->order_by('invoice_id', 'desc');
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
-        
+
         if ($status == 'all') {
             $this->db->group_start();
             $this->db->where('test_status', 'done');
@@ -679,20 +704,21 @@ class Lab_model extends CI_model {
             $this->db->where('status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
-       
-        $this->db ->limit($limit, $start);
+
+        $this->db->limit($limit, $start);
         $query = $this->db->get('lab');
         return $query->result();
     }
 
-    function getLabReportByLimitBySearch($limit, $start, $search, $order, $dir, $status, $category, $from, $to) {
+    function getLabReportByLimitBySearch($limit, $start, $search, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -710,7 +736,7 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -731,20 +757,20 @@ class Lab_model extends CI_model {
             $this->db->where('status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
-        
+
 
         $this->db->limit($limit, $start);
         $this->db->select('*');
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -753,7 +779,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-        function getDeliveryReport($status, $category, $from, $to) {
+    function getDeliveryReport($status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -771,11 +798,11 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -791,10 +818,10 @@ class Lab_model extends CI_model {
             $this->db->where('delivery_status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
@@ -802,7 +829,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getDeliveryReportWithoutSearch($order, $dir, $status, $category, $from, $to) {
+    function getDeliveryReportWithoutSearch($order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -820,11 +848,11 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -840,14 +868,14 @@ class Lab_model extends CI_model {
             $this->db->where('delivery_status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -857,7 +885,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getDeliveryReportBySearch($search, $order, $dir, $status, $category, $from, $to) {
+    function getDeliveryReportBySearch($search, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -875,17 +904,17 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
             $this->db->order_by('invoice_id', 'desc');
         }
 
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('test_status', 'done');
@@ -900,10 +929,10 @@ class Lab_model extends CI_model {
             $this->db->where('delivery_status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
@@ -914,7 +943,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getDeliveryReportByLimit($limit, $start, $order, $dir, $status, $category, $from, $to) {
+    function getDeliveryReportByLimit($limit, $start, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -932,11 +962,11 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
-        if($from) {
+
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -952,14 +982,14 @@ class Lab_model extends CI_model {
             $this->db->where('delivery_status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
 
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -970,7 +1000,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getDeliveryReportByLimitBySearch($limit, $start, $search, $order, $dir, $status, $category, $from, $to) {
+    function getDeliveryReportByLimitBySearch($limit, $start, $search, $order, $dir, $status, $category, $from, $to)
+    {
         if ($category != 'all') {
             $this->db->where('payment_category', $category);
             $all_categories = $this->db->get('payment_category')->result();
@@ -988,7 +1019,7 @@ class Lab_model extends CI_model {
                 array_push($array, $cat->id);
             }
         }
-        
+
         if ($order != null) {
             $this->db->order_by($order, $dir);
         } else {
@@ -997,10 +1028,10 @@ class Lab_model extends CI_model {
 
         $this->db->where('test_status', 'done');
         $this->db->where('status', 'completed');
-        if($from) {
+        if ($from) {
             $this->db->where('date >=', strtotime($from));
         }
-        if($to) {
+        if ($to) {
             $this->db->where('date <=', strtotime($to));
         }
         if ($status == 'all') {
@@ -1013,13 +1044,13 @@ class Lab_model extends CI_model {
             $this->db->where('delivery_status', $status);
             $this->db->group_end();
         }
-        
+
         if ($category != 'all' && count($array) > 0) {
             $this->db->where_in('category_id', $array);
-        } else if($category != 'all' && count($array) == 0) {
+        } else if ($category != 'all' && count($array) == 0) {
             $this->db->where('category_id', 0);
         }
-        
+
 
         $this->db->limit($limit, $start);
         $this->db->select('*');
@@ -1028,15 +1059,17 @@ class Lab_model extends CI_model {
         $query = $this->db->get('lab');
         return $query->result();
     }
-    
-    function getLabById($id) {
+
+    function getLabById($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('id', $id);
         $query = $this->db->get('lab');
         return $query->row();
     }
 
-    function getLabByPatientId($id) {
+    function getLabByPatientId($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->order_by('id', 'desc');
         $this->db->where('patient', $id);
@@ -1044,7 +1077,17 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByPatientIdByDate($id, $date_from, $date_to) {
+    function getLabByPatientIdForPatient($id)
+    {
+        $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+        $this->db->order_by('id', 'desc');
+        $this->db->where('patient', $id);
+        $query = $this->db->get('lab');
+        return $query->result();
+    }
+
+    function getLabByPatientIdByDate($id, $date_from, $date_to)
+    {
         $this->db->order_by('id', 'desc');
         $this->db->where('patient', $id);
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -1054,7 +1097,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByUserId($id) {
+    function getLabByUserId($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->order_by('id', 'desc');
         $this->db->where('user', $id);
@@ -1062,7 +1106,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getOtLabByPatientId($id) {
+    function getOtLabByPatientId($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->order_by('id', 'desc');
         $this->db->where('patient', $id);
@@ -1070,7 +1115,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByPatientIdByStatus($id) {
+    function getLabByPatientIdByStatus($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('patient', $id);
         $this->db->where('status', 'unpaid');
@@ -1078,46 +1124,54 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function updateLab($id, $data) {
+    function updateLab($id, $data)
+    {
         $this->db->where('id', $id);
         $this->db->update('lab', $data);
     }
 
-    function insertLabCategory($data) {
+    function insertLabCategory($data)
+    {
         $data1 = array('hospital_id' => $this->session->userdata('hospital_id'));
         $data2 = array_merge($data, $data1);
         $this->db->insert('lab_category', $data2);
     }
 
-    function getLabCategory() {
+    function getLabCategory()
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $query = $this->db->get('lab_category');
         return $query->result();
     }
 
-    function getLabCategoryById($id) {
+    function getLabCategoryById($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('id', $id);
         $query = $this->db->get('lab_category');
         return $query->row();
     }
 
-    function updateLabCategory($id, $data) {
+    function updateLabCategory($id, $data)
+    {
         $this->db->where('id', $id);
         $this->db->update('lab_category', $data);
     }
 
-    function deleteLab($id) {
+    function deleteLab($id)
+    {
         $this->db->where('id', $id);
         $this->db->delete('lab');
     }
 
-    function deleteLabCategory($id) {
+    function deleteLabCategory($id)
+    {
         $this->db->where('id', $id);
         $this->db->delete('lab_category');
     }
 
-    function getLabByDoctor($doctor) {
+    function getLabByDoctor($doctor)
+    {
         $this->db->select('*');
         $this->db->from('lab');
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -1126,7 +1180,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByDate($date_from, $date_to) {
+    function getLabByDate($date_from, $date_to)
+    {
         $this->db->select('*');
         $this->db->from('lab');
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -1136,7 +1191,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByDoctorDate($doctor, $date_from, $date_to) {
+    function getLabByDoctorDate($doctor, $date_from, $date_to)
+    {
         $this->db->select('*');
         $this->db->from('lab');
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
@@ -1147,7 +1203,8 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function getLabByUserIdByDate($user, $date_from, $date_to) {
+    function getLabByUserIdByDate($user, $date_from, $date_to)
+    {
         $this->db->order_by('id', 'desc');
         $this->db->select('*');
         $this->db->from('lab');
@@ -1159,53 +1216,61 @@ class Lab_model extends CI_model {
         return $query->result();
     }
 
-    function insertTemplate($data) {
+    function insertTemplate($data)
+    {
         $data1 = array('hospital_id' => $this->session->userdata('hospital_id'));
         $data2 = array_merge($data, $data1);
         $this->db->insert('template', $data2);
     }
 
-    function getTemplate() {
+    function getTemplate()
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('template');
         return $query->result();
     }
 
-    function updateTemplate($id, $data) {
+    function updateTemplate($id, $data)
+    {
         $this->db->where('id', $id);
         $this->db->update('template', $data);
     }
 
-    function getTemplateById($id) {
+    function getTemplateById($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('id', $id);
         $query = $this->db->get('template');
         return $query->row();
     }
 
-    function deletetemplate($id) {
+    function deletetemplate($id)
+    {
         $this->db->where('id', $id);
         $this->db->delete('template');
     }
 
-    function getLabByInvoice($invoice) {
+    function getLabByInvoice($invoice)
+    {
 
         $this->db->where('invoice_id', $invoice);
         $query = $this->db->get('lab');
         return $query->result();
     }
 
-    function getAllLabels($invoice, $category) {
+    function getAllLabels($invoice, $category)
+    {
         $this->db->where('invoice_id', $invoice);
         $this->db->where('category_id', $category);
         $result = $this->db->get('lab')->row();
         return $result;
     }
 
-    function lastRowByLab(){
+    function lastRowByLab()
+    {
         return $this->db->where('hospital_id', $this->session->userdata('hospital_id'))
-                        ->order_by('id',"desc")->limit(1)->get('lab')->row();
+            ->order_by('id', "desc")->limit(1)->get('lab')->row();
     }
     function getLabByBedId($id)
     {
@@ -1213,17 +1278,20 @@ class Lab_model extends CI_model {
             ->where('hospital_id', $this->session->userdata('hospital_id'))
             ->get('lab')->result();
     }
-    function deleteLabByDiagnosticId($id) {
+    function deleteLabByDiagnosticId($id)
+    {
         $this->db->where('diagnostic_id', $id);
         $this->db->delete('lab');
     }
-    function getLabByDiagnosticId($id) {
+    function getLabByDiagnosticId($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('diagnostic_id', $id);
         $query = $this->db->get('lab');
         return $query->row();
     }
-    function getLabByPaymentProcedureId($id) {
+    function getLabByPaymentProcedureId($id)
+    {
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->where('category_id', $id);
         $query = $this->db->get('lab');

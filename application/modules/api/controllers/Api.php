@@ -427,7 +427,7 @@ class Api extends MX_Controller
         logToConsoleFile('createPatientProfile');
 
         $ion_id = $this->input->post('id');
-        $edit = $this->input - post('edit');
+        $edit = $this->input->post('edit');
         $email = $this->db->get_where('users', array('id' => $ion_id))->row()->email;
         $name = $this->input->post('name');
         $age = $this->input->post('age');
@@ -458,6 +458,11 @@ class Api extends MX_Controller
         }
         $birthdate = $years . '-' . $months . '-' . $days;
         $bloodgroup = $this->input->post('bloodgroup');
+
+        $patient_id = $this->input->post('p_id');
+        if (empty($patient_id)) {
+            $patient_id = rand(10000, 1000000);
+        }
         // validate data from null and mis-type
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'trim|required|min_length[2]|max_length[100]|xss_clean');

@@ -3,9 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Home extends MX_Controller {
+class Home extends MX_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->model('finance/finance_model');
         $this->load->model('appointment/appointment_model');
@@ -13,7 +15,8 @@ class Home extends MX_Controller {
         $this->load->model('home_model');
     }
 
-    public function index() {
+    public function index()
+    {
         $data = array();
 
         if (!$this->ion_auth->in_group(array('superadmin'))) {
@@ -89,6 +92,8 @@ class Home extends MX_Controller {
             }
 
             if ($this->ion_auth->in_group(array('Patient'))) {
+
+                log_message('error', 'in group patients');
                 redirect('patient/medicalHistory');
             }
             if ($this->ion_auth->in_group(array('Laboratorist'))) {
@@ -140,10 +145,10 @@ class Home extends MX_Controller {
         }
     }
 
-    public function permission() {
+    public function permission()
+    {
         $this->load->view('permission');
     }
-
 }
 
 /* End of file home.php */

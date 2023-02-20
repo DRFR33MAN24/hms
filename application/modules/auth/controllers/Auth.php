@@ -1,10 +1,12 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Auth extends MX_Controller {
+class Auth extends MX_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->database();
         $this->load->library(array('ion_auth', 'form_validation'));
@@ -14,7 +16,8 @@ class Auth extends MX_Controller {
         $this->lang->load('auth');
     }
 
-    function index() {
+    function index()
+    {
 
         if (!$this->ion_auth->logged_in()) {
             //redirect them to the login page
@@ -35,8 +38,9 @@ class Auth extends MX_Controller {
     }
 
     //log the user in
-    function login() {
-       
+    function login()
+    {
+
         if ($this->ion_auth->logged_in()) {
 
             redirect('home');
@@ -51,68 +55,67 @@ class Auth extends MX_Controller {
             //check to see if the user is logging in
             //check for "remember me"
 
-//            $users = $this->db->get_where('users', array('email' => $this->input->post('identity')))->row();
-//
-//            if (!empty($users->hospital_ion_id)) {
-//                $hospital_details = $this->db->get_where('users', array('id' => $users->hospital_ion_id))->row();
-//                if (empty($hospital_details)) {
-//                    $this->session->set_flashdata('message', $this->ion_auth->errors());
-//                   redirect('auth/login', 'refresh'); 
-//                }
-//            } else {
-//                if ($users->active == '0') {
-//                   $this->session->set_flashdata('message', $this->ion_auth->errors());
-//                    redirect('auth/login', 'refresh'); 
-//                }
-//            }
+            //            $users = $this->db->get_where('users', array('email' => $this->input->post('identity')))->row();
+            //
+            //            if (!empty($users->hospital_ion_id)) {
+            //                $hospital_details = $this->db->get_where('users', array('id' => $users->hospital_ion_id))->row();
+            //                if (empty($hospital_details)) {
+            //                    $this->session->set_flashdata('message', $this->ion_auth->errors());
+            //                   redirect('auth/login', 'refresh'); 
+            //                }
+            //            } else {
+            //                if ($users->active == '0') {
+            //                   $this->session->set_flashdata('message', $this->ion_auth->errors());
+            //                    redirect('auth/login', 'refresh'); 
+            //                }
+            //            }
             $remember = (bool) $this->input->post('remember');
 
             if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
                 //if the login is successful
                 //redirect them back to the home page
-                $user_details=$this->db->get_where('users',array('email'=>$this->input->post('identity')))->row();
+                $user_details = $this->db->get_where('users', array('email' => $this->input->post('identity')))->row();
                 if (!empty($user_details->hospital_ion_id)) {
-                    $hospital_id=$user_details->hospital_ion_id;
-                }else{
-                    if($this->ion_auth->in_group(array('admin'))){
-                        $hospital_id=$user_details->id;
-                    }else{
-                        $hospital_id='';
+                    $hospital_id = $user_details->hospital_ion_id;
+                } else {
+                    if ($this->ion_auth->in_group(array('admin'))) {
+                        $hospital_id = $user_details->id;
+                    } else {
+                        $hospital_id = '';
                     }
-                   
                 }
-                $ip_address=$this->input->ip_address();
-                $email_login=$this->input->post('identity');
-                $name=$user_details->username;
-                $groups_ids=$this->db->get_where('users_groups',array('user_id'=>$user_details->id))->row();
-                if($groups_ids->group_id=='1'){
-                    $role='SuperAdmin';
-                }elseif($groups_ids->group_id=='11'){
-                    $role='Admin';
-                }elseif($groups_ids->group_id=='3'){
-                    $role='Accountant';
-                }elseif($groups_ids->group_id=='4'){
-                    $role='Doctor';
-                }elseif($groups_ids->group_id=='5'){
-                    $role='Patient';
-                }elseif($groups_ids->group_id=='6'){
-                    $role='Nurse';
-                }elseif($groups_ids->group_id=='7'){
-                    $role='Pharmacist';
-                }elseif($groups_ids->group_id=='8'){
-                    $role='Laboratorist';
-                }elseif($groups_ids->group_id=='10'){
-                    $role='Receptionist';
+                $ip_address = $this->input->ip_address();
+                $email_login = $this->input->post('identity');
+                $name = $user_details->username;
+                $groups_ids = $this->db->get_where('users_groups', array('user_id' => $user_details->id))->row();
+                if ($groups_ids->group_id == '1') {
+                    $role = 'SuperAdmin';
+                } elseif ($groups_ids->group_id == '11') {
+                    $role = 'Admin';
+                } elseif ($groups_ids->group_id == '3') {
+                    $role = 'Accountant';
+                } elseif ($groups_ids->group_id == '4') {
+                    $role = 'Doctor';
+                } elseif ($groups_ids->group_id == '5') {
+                    $role = 'Patient';
+                } elseif ($groups_ids->group_id == '6') {
+                    $role = 'Nurse';
+                } elseif ($groups_ids->group_id == '7') {
+                    $role = 'Pharmacist';
+                } elseif ($groups_ids->group_id == '8') {
+                    $role = 'Laboratorist';
+                } elseif ($groups_ids->group_id == '10') {
+                    $role = 'Receptionist';
                 }
-               $data=array(
-                   'hospital_id'=>$hospital_id,
-                   'ip_address'=>$ip_address,
-                   'email'=>$email_login,
-                   'name'=>$name,
-                   'role'=>$role,
-                   'date_time'=>date('d-m-Y H:i:s')
-               );
-              
+                $data = array(
+                    'hospital_id' => $hospital_id,
+                    'ip_address' => $ip_address,
+                    'email' => $email_login,
+                    'name' => $name,
+                    'role' => $role,
+                    'date_time' => date('d-m-Y H:i:s')
+                );
+
                 $this->logs_model->insertLogs($data);
                 $this->session->set_flashdata('message', $this->ion_auth->messages());
                 redirect('home', 'refresh');
@@ -127,12 +130,14 @@ class Auth extends MX_Controller {
             //set the flash data error message if there is one
             $data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-            $data['identity'] = array('name' => 'identity',
+            $data['identity'] = array(
+                'name' => 'identity',
                 'id' => 'identity',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('identity'),
             );
-            $data['password'] = array('name' => 'password',
+            $data['password'] = array(
+                'name' => 'password',
                 'id' => 'password',
                 'type' => 'password',
             );
@@ -142,7 +147,8 @@ class Auth extends MX_Controller {
     }
 
     //log the user out
-    function logout() {
+    function logout()
+    {
 
         ob_start();
 
@@ -158,7 +164,8 @@ class Auth extends MX_Controller {
     }
 
     //change password
-    function change_password() {
+    function change_password()
+    {
         $this->form_validation->set_rules('old', $this->lang->line('change_password_validation_old_password_label'), 'required');
         $this->form_validation->set_rules('new', $this->lang->line('change_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[new_confirm]');
         $this->form_validation->set_rules('new_confirm', $this->lang->line('change_password_validation_new_password_confirm_label'), 'required');
@@ -218,7 +225,8 @@ class Auth extends MX_Controller {
     }
 
     //forgot password
-    function forgot_password() {
+    function forgot_password()
+    {
 
         //setting validation rules by checking wheather identity is username or email
         if ($this->config->item('identity', 'ion_auth') == 'username') {
@@ -230,7 +238,8 @@ class Auth extends MX_Controller {
 
         if ($this->form_validation->run() == false) {
             //setup the input
-            $data['email'] = array('name' => 'email',
+            $data['email'] = array(
+                'name' => 'email',
                 'id' => 'email',
             );
 
@@ -277,7 +286,8 @@ class Auth extends MX_Controller {
     }
 
     //reset password - final step for forgotten password
-    public function reset_password($code = NULL) {
+    public function reset_password($code = NULL)
+    {
         if (!$code) {
             show_404();
         }
@@ -351,7 +361,8 @@ class Auth extends MX_Controller {
     }
 
     //activate the user
-    function activate($id, $code = false) {
+    function activate($id, $code = false)
+    {
         if ($code !== false) {
             $activation = $this->ion_auth->activate($id, $code);
         } else if ($this->ion_auth->is_admin()) {
@@ -370,7 +381,8 @@ class Auth extends MX_Controller {
     }
 
     //deactivate the user
-    function deactivate($id = NULL) {
+    function deactivate($id = NULL)
+    {
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
             //redirect them to the home page because they must be an administrator to view this
             return show_error('You must be an administrator to view this page.');
@@ -408,7 +420,8 @@ class Auth extends MX_Controller {
     }
 
     //create a new user
-    function create_user() {
+    function create_user()
+    {
         $data['title'] = "Create User";
 
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
@@ -496,7 +509,8 @@ class Auth extends MX_Controller {
     }
 
     //edit a user
-    function edit_user($id) {
+    function edit_user($id)
+    {
         $data['title'] = "Edit User";
 
         if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id))) {
@@ -626,7 +640,8 @@ class Auth extends MX_Controller {
     }
 
     // create a new group
-    function create_group() {
+    function create_group()
+    {
         $data['title'] = $this->lang->line('create_group_title');
 
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
@@ -667,7 +682,8 @@ class Auth extends MX_Controller {
     }
 
     //edit a group
-    function edit_group($id) {
+    function edit_group($id)
+    {
         // bail if no group id given
         if (!$id || empty($id)) {
             redirect('auth', 'refresh');
@@ -722,7 +738,8 @@ class Auth extends MX_Controller {
         $this->_render_page('auth/edit_group', $data);
     }
 
-    function _get_csrf_nonce() {
+    function _get_csrf_nonce()
+    {
         $this->load->helper('string');
         $key = random_string('alnum', 8);
         $value = random_string('alnum', 20);
@@ -732,16 +749,20 @@ class Auth extends MX_Controller {
         return array($key => $value);
     }
 
-    function _valid_csrf_nonce() {
-        if ($this->input->post($this->session->flashdata('csrfkey')) !== FALSE &&
-                $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')) {
+    function _valid_csrf_nonce()
+    {
+        if (
+            $this->input->post($this->session->flashdata('csrfkey')) !== FALSE &&
+            $this->input->post($this->session->flashdata('csrfkey')) == $this->session->flashdata('csrfvalue')
+        ) {
             return TRUE;
         } else {
             return FALSE;
         }
     }
 
-    function _render_page($view, $data = null, $render = false) {
+    function _render_page($view, $data = null, $render = false)
+    {
 
         $this->viewdata = (empty($data)) ? $data : $data;
 
@@ -750,5 +771,4 @@ class Auth extends MX_Controller {
         if (!$render)
             return $view_html;
     }
-
 }

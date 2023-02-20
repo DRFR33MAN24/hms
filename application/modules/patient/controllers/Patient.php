@@ -890,25 +890,25 @@ class Patient extends MX_Controller
         }
 
 
-        $patient_hospital_id = $this->patient_model->getPatientById($id)->hospital_id;
-        if ($patient_hospital_id != $this->session->userdata('hospital_id')) {
-            redirect('home/permission');
-        }
+        // $patient_hospital_id = $this->patient_model->getPatientById($id)->hospital_id;
+        // if ($patient_hospital_id != $this->session->userdata('hospital_id')) {
+        //     redirect('home/permission');
+        // }
 
         $data['redirect_tab'] = $this->input->get('redirect_tab');
         $data['patient'] = $this->patient_model->getPatientById($id);
-        $data['appointments'] = $this->appointment_model->getAppointmentByPatient($data['patient']->id);
+        $data['appointments'] = $this->appointment_model->getAppointmentByPatientForPatient($data['patient']->id);
         $data['patients'] = $this->patient_model->getPatient();
-        $data['doctors'] = $this->doctor_model->getDoctor();
-        $data['prescriptions'] = $this->prescription_model->getPrescriptionByPatientId($id);
-        $data['labs'] = $this->lab_model->getLabByPatientId($id);
-        $data['beds'] = $this->bed_model->getBedAllotmentsByPatientId($id);
-        $data['medical_histories'] = $this->patient_model->getMedicalHistoryByPatientId($id);
-        $data['patient_materials'] = $this->patient_model->getPatientMaterialByPatientId($id);
-        $data['folders'] = $this->patient_model->getFolderByPatientId($id);
-        $data['vital_signs'] = $this->patient_model->getVitalSignByPatientId($id);
+        $data['doctors'] = $this->doctor_model->getDoctorForPatient();
+        $data['prescriptions'] = $this->prescription_model->getPrescriptionByPatientIdForPatient($id);
+        $data['labs'] = $this->lab_model->getLabByPatientIdForPatient($id);
+        $data['beds'] = $this->bed_model->getBedAllotmentsByPatientIdForPatient($id);
+        $data['medical_histories'] = $this->patient_model->getMedicalHistoryByPatientIdForPatient($id);
+        $data['patient_materials'] = $this->patient_model->getPatientMaterialByPatientIdForPatient($id);
+        $data['folders'] = $this->patient_model->getFolderByPatientIdForPatient($id);
+        $data['vital_signs'] = $this->patient_model->getVitalSignByPatientIdForPatient($id);
         $data['odontogram'] = $this->patient_model->getOdontogram($id);
-        $data['settings'] = $this->settings_model->getSettings();
+        //$data['settings'] = $this->settings_model->getSettings();
         foreach ($data['appointments'] as $appointment) {
             $doctor_details = $this->doctor_model->getDoctorById($appointment->doctor);
             if (!empty($doctor_details)) {
