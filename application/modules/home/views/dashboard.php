@@ -494,7 +494,7 @@
                                     <i class="fa fa-notes-medical"></i>
                                     <span class="badge bg-success">
                                         <?php
-                                        $this->db->where('hospital_id', $this->hospital_id);
+                                        //$this->db->where('hospital_id', $this->hospital_id);
                                         $query = $this->db->get('report');
                                         $query = $query->result();
                                         foreach ($query as $report) {

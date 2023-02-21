@@ -202,7 +202,12 @@ class Prescription extends MX_Controller
     {
         $id = $this->input->get('id');
         $data['prescription'] = $this->prescription_model->getPrescriptionById($id);
-
+        if ($this->ion_auth->in_group(array('Patient'))) {
+            $data['settings'] = $this->settings_model->getSettings();
+            $this->load->view('home/dashboard', $data);
+            $this->load->view('prescription_view_1', $data);
+            $this->load->view('home/footer');
+        }
         if (!empty($data['prescription']->hospital_id)) {
             if ($data['prescription']->hospital_id != $this->session->userdata('hospital_id')) {
                 $this->load->view('home/permission');

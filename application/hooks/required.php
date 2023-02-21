@@ -39,6 +39,7 @@ function required()
             );
             $CI->session->set_userdata($newdata);
         } else {
+            log_message('error', '42');
             redirect('home/permission');
         }
 
@@ -46,16 +47,10 @@ function required()
 
         $CI->db->where('hospital_id', $CI->session->userdata('site_id'));
         $language = $CI->db->get('site_settings')->row()->language;
-        if(empty($language)){
+        if (empty($language)) {
             $language = 'english';
         }
         $CI->lang->load('system_syntax', $language);
-
-
-
-
-
-
     } else {
         if ($CI->ion_auth->logged_in()) {
             $user = $CI->ion_auth->get_user_id();
@@ -242,16 +237,22 @@ function required()
                 if ($RTR->class != "schedule" && $RTR->class != "meeting" && $RTR->class != "featured" && $RTR->class != "gallery" && $RTR->class != "review" && $RTR->class != "gridsection" && $RTR->class != "service" && $RTR->class != "slide") {
                     if ($RTR->class != "pgateway") {
                         if (!in_array($RTR->class, $CI->modules)) {
-                            redirect('home');
+                            $modules = "accountant,appointment,lab,bed,department,doctor,donor,finance,pharmacy,laboratorist,medicine,nurse,patient,pharmacist,prescription,receptionist,report,notice,email,sms,file,payroll,attendance,leave,chat,site";
+                            $CI->modules = explode(',', $modules);
+                            log_message('error', $RTR->class);
+                            //redirect('home');
                         }
                     } elseif (!in_array('finance', $CI->modules)) {
+                        log_message('error', '250');
                         redirect('home');
                     }
                 } elseif (!in_array('appointment', $CI->modules)) {
+                    log_message('error', '254');
                     redirect('home');
                 }
             } else {
                 if (!in_array($RTR->class, $CI->super_modules)) {
+                    log_message('error', '259');
                     redirect('home');
                 }
             }

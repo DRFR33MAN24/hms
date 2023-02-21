@@ -525,7 +525,7 @@ class Patient extends MX_Controller
             $patient_ion_id = $this->ion_auth->get_user_id();
             $patient_id = $this->patient_model->getPatientByIonUserId($patient_ion_id)->id;
             $data['doctors'] = $this->doctor_model->getDoctor();
-            $data['prescriptions'] = $this->prescription_model->getPrescriptionByPatientId($patient_id);
+            $data['prescriptions'] = $this->prescription_model->getPrescriptionByPatientIdForPatient($patient_id);
             $data['settings'] = $this->settings_model->getSettings();
             $this->load->view('home/dashboard', $data);
             $this->load->view('my_prescription', $data);
@@ -881,8 +881,10 @@ class Patient extends MX_Controller
 
     function medicalHistory()
     {
+        log_message('error', 'medicalHistory');
         $data = array();
         $id = $this->input->get('id');
+        log_message('error', $id);
 
         if ($this->ion_auth->in_group(array('Patient'))) {
             $patient_ion_id = $this->ion_auth->get_user_id();

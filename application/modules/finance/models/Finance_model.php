@@ -103,6 +103,20 @@ class Finance_model extends CI_model
 
     function getPaymentByPatientId($id)
     {
+        if ($this->ion_auth->in_group('Patient')) {
+            //$this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+            $this->db->order_by('id', 'desc');
+            $this->db->where('patient', $id);
+            $query = $this->db->get('payment');
+            return $query->result();
+        } else {
+            $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
+            $this->db->order_by('id', 'desc');
+            $this->db->where('patient', $id);
+            $query = $this->db->get('payment');
+            return $query->result();
+        }
+
         $this->db->where('hospital_id', $this->session->userdata('hospital_id'));
         $this->db->order_by('id', 'desc');
         $this->db->where('patient', $id);
@@ -1150,9 +1164,9 @@ class Finance_model extends CI_model
         return $due_balance = $bill_balance - $deposit_balance;
     }
 
-    
 
-    function getPaymentSummaryById($id) 
+
+    function getPaymentSummaryById($id)
     {
         $query = $this->db->get_where('payment', array('id' => $id))->result();
         $deposits = $this->db->get_where('patient_deposit', array('payment_id' => $id))->result();
@@ -1521,8 +1535,9 @@ class Finance_model extends CI_model
         $query = $this->db->get('payment');
         return $query->row();
     }
-    function lastRowByHospitalPayment(){
+    function lastRowByHospitalPayment()
+    {
         return $this->db->where('hospital_id', $this->session->userdata('hospital_id'))
-                        ->order_by('id',"desc")->limit(1)->get('payment')->row();
+            ->order_by('id', "desc")->limit(1)->get('payment')->row();
     }
 }
