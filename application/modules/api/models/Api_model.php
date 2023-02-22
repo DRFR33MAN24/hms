@@ -852,6 +852,13 @@ class Api_model extends CI_model
         $query = $this->db->get('appointment');
         return $query->result();
     }
+    function getAllPatientAppointments($patient_id)
+    {
+        $this->db->order_by('id', 'desc');
+        $this->db->where('patient', $patient_id);
+        $query = $this->db->get('appointment');
+        return $query->result();
+    }
 
     function getAvailableSlotByDoctorByDate($date, $doctor, $hospitalID)
     {

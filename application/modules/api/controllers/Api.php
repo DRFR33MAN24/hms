@@ -435,28 +435,28 @@ class Api extends MX_Controller
         $phone = $this->input->post('phone');
         $sex = $this->input->post('sex');
         $birthdate = $this->input->post('birthdate');
-        if (empty($birthdate)) {
-            $years = $this->input->post('years');
-            $months = $this->input->post('months');
-            $days = $this->input->post('days');
-            if (empty($years)) {
-                $years = '0';
-            }
-            if (empty($months)) {
-                $months = '0';
-            }
-            if (empty($days)) {
-                $days = '0';
-            }
-        } else {
-            $dateOfBirth = $birthdate;
-            $today = date("Y-m-d");
-            $diff = date_diff(date_create($dateOfBirth), date_create($today));
-            $years = $diff->format('%y');
-            $months = $diff->format('%m');
-            $days = $diff->format('%d');
-        }
-        $birthdate = $years . '-' . $months . '-' . $days;
+        // if (empty($birthdate)) {
+        //     $years = $this->input->post('years');
+        //     $months = $this->input->post('months');
+        //     $days = $this->input->post('days');
+        //     if (empty($years)) {
+        //         $years = '0';
+        //     }
+        //     if (empty($months)) {
+        //         $months = '0';
+        //     }
+        //     if (empty($days)) {
+        //         $days = '0';
+        //     }
+        // } else {
+        //     $dateOfBirth = $birthdate;
+        //     $today = date("Y-m-d");
+        //     $diff = date_diff(date_create($dateOfBirth), date_create($today));
+        //     $years = $diff->format('%y');
+        //     $months = $diff->format('%m');
+        //     $days = $diff->format('%d');
+        // }
+        // $birthdate = $years . '-' . $months . '-' . $days;
         $bloodgroup = $this->input->post('bloodgroup');
 
         $patient_id = $this->input->post('p_id');
@@ -2476,14 +2476,14 @@ class Api extends MX_Controller
         } else {
             $ion_id = $this->findPatientIonId($id);
         }
-        $this->hospitalID = $this->getHospitalID($ion_id);
+        // $this->hospitalID = $this->getHospitalID($ion_id);
         // $id = $ion_id;
         if ($group == 'doctor') {
             $doctor = $this->db->get_where('doctor', array('ion_user_id' => $id))->row()->id;
             $data1['appointments'] = $this->api_model->getAppointmentListByDoctor($doctor, $this->hospitalID);
         } else {
             //$data1['appointments'] = $this->api_model->getAppointment($this->hospitalID);
-            $data1['appointments'] = $this->api_model->getAllAppointments();
+            $data1['appointments'] = $this->api_model->getAllPatientAppointments($id);
             logToConsoleFile($data1);
         }
 
