@@ -657,9 +657,9 @@ class Api_model extends CI_model
         return $query->result();
     }
 
-    function getDepositByPatientId($id, $hospital_id)
+    function getDepositByPatientId($id)
     {
-        $this->db->where('hospital_id', $hospital_id);
+        //$this->db->where('hospital_id', $hospital_id);
         $this->db->order_by('id', 'desc');
         $this->db->where('patient', $id);
         $query = $this->db->get('patient_deposit');
@@ -677,9 +677,9 @@ class Api_model extends CI_model
         return $query->result();
     }
 
-    function getPaymentByPatientId($id, $hospital_id)
+    function getPaymentByPatientId($id)
     {
-        $this->db->where('hospital_id', $hospital_id);
+        //$this->db->where('hospital_id', $hospital_id);
         $this->db->order_by('id', 'desc');
         $this->db->where('patient', $id);
         $query = $this->db->get('payment');

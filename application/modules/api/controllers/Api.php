@@ -430,7 +430,7 @@ class Api extends MX_Controller
         $edit = $this->input->post('edit');
         $email = $this->db->get_where('users', array('id' => $ion_id))->row()->email;
         $name = $this->input->post('name');
-        $age = $this->input->post('age');
+        $age = $this->input->post('birthdate');
         $address = $this->input->post('address');
         $phone = $this->input->post('phone');
         $sex = $this->input->post('sex');
@@ -1200,7 +1200,7 @@ class Api extends MX_Controller
         logToConsoleFile($user);
         logToConsoleFile($this->hospitalID);
         logToConsoleFile($ion_user_id);
-        $this->db->where('patient_id', $patient);
+        $this->db->where('patient_id', $this->api_model->getPatientByIdMM($patient)->id);
         $this->db->where('hospital_id', $this->hospitalID);
         $result = $this->db->get('patients_hospitals')->row();
         logToConsoleFile($result);
@@ -1208,7 +1208,7 @@ class Api extends MX_Controller
 
             $data = array(
 
-                'patient_id' => $patient,
+                'patient_id' => $this->api_model->getPatientByIdMM($patient)->id,
                 'hospital_id' => $this->hospitalID
             );
 
@@ -1240,7 +1240,7 @@ class Api extends MX_Controller
         $doctorname = $this->api_model->getDoctorById($doctor, $this->hospitalID)->name;
         $data = array();
         $data = array(
-            'patient' => $patient,
+            'patient' => $patient_details->id,
             'patientname' => $patientname,
             'doctor' => $doctor,
             'doctorname' => $doctorname,
@@ -1260,7 +1260,7 @@ class Api extends MX_Controller
         );
         $data_appointment = array(
             'category_name' => 'Consultant Fee',
-            'patient' => $patient,
+            'patient' => $patient_details->id,
             'amount' => '0',
             'doctor' => $doctor,
             'discount' => '0',
@@ -1986,9 +1986,9 @@ class Api extends MX_Controller
         $id = $this->input->get('id');
         //$patient_ion_id = $this->input->get('id');
         $patient_ion_id = $this->findPatientIonId($id);
-        $this->hospitalID = $this->getHospitalID($patient_ion_id);
-        $patient = $this->api_model->getPatientByIonUserId($patient_ion_id, $this->hospitalID)->id;
-        $data = $this->api_model->getPaymentByPatientId($patient, $this->hospitalID);
+        //$this->hospitalID = $this->getHospitalID($patient_ion_id);
+        $patient = $this->api_model->getPatientByIonUserIdAllHospitals($patient_ion_id)->id;
+        $data = $this->api_model->getPaymentByPatientId($patient);
         echo json_encode($data);
     }
 
@@ -1997,9 +1997,9 @@ class Api extends MX_Controller
         $id = $this->input->get('id');
         //$patient_ion_id = $this->input->get('id');
         $patient_ion_id = $this->findPatientIonId($id);
-        $this->hospitalID = $this->getHospitalID($patient_ion_id);
-        $patient = $this->api_model->getPatientByIonUserId($patient_ion_id, $this->hospitalID)->id;
-        $settings = $this->api_model->getSettings($this->hospitalID);
+        //$this->hospitalID = $this->getHospitalID($patient_ion_id);
+        $patient = $this->api_model->getPatientByIonUserId($patient_ion_id)->id;
+        //$settings = $this->api_model->getSettings($this->hospitalID);
         $data = $this->api_model->getGatewayByName($settings->payment_gateway, $this->hospitalID);
         echo json_encode($data);
     }
@@ -2057,11 +2057,11 @@ class Api extends MX_Controller
 
         $userID = $this->findPatientIonId($patient_id);
 
-        $this->hospitalID = $this->getHospitalID($userID);
+        // $this->hospitalID = $this->getHospitalID($userID);
 
         if ($group == 'Patient' || $group == 'patient') {
             $patient_ion_id = $userID;
-            $patient = $this->api_model->getPatientByIonUserId($patient_ion_id, $this->hospitalID)->id;
+            $patient = $this->api_model->getPatientByIonUserId($patient_ion_id)->id;
         } else {
             $data['message'] = 'undefined_patient_id';
             echo json_encode($data);
@@ -2483,7 +2483,7 @@ class Api extends MX_Controller
             $data1['appointments'] = $this->api_model->getAppointmentListByDoctor($doctor, $this->hospitalID);
         } else {
             //$data1['appointments'] = $this->api_model->getAppointment($this->hospitalID);
-            $data1['appointments'] = $this->api_model->getAllPatientAppointments($id);
+            $data1['appointments'] = $this->api_model->getAllPatientAppointments($this->api_model->getPatientByIonUserIdAllHospitals($id)->id);
             logToConsoleFile($data1);
         }
 
@@ -2495,10 +2495,10 @@ class Api extends MX_Controller
 
             if ($group == 'patient') {
                 $patient_ion_id = $id;
-                $patient_details = $this->api_model->getPatientByIdMM($patient_ion_id);
-
+                $patient_details = $this->api_model->getPatientByIonUserIdAllHospitals($patient_ion_id);
+                logToConsoleFile($patient_details);
                 $patient_id = $patient_details->id;
-                if ($patient_id == $appointment->patient) {
+                if ($patient_details->id == $appointment->patient) {
                     $patientdetails = $this->api_model->getPatientByIdMM($appointment->patient);
                     if (!empty($patientdetails)) {
                         $patientname = $patientdetails->name;
@@ -3017,8 +3017,8 @@ class Api extends MX_Controller
     {
         $patient = $this->input->post('id');
         $patient_ion_id = $this->input->post('ion_id');
-        $this->hospitalID = $this->getHospitalID($patient_ion_id);
-        $data = $this->api_model->getDepositByPatientId($patient, $this->hospitalID);
+        //$this->hospitalID = $this->getHospitalID($patient_ion_id);
+        $data = $this->api_model->getDepositByPatientId($patient);
         echo json_encode($data);
     }
 
@@ -3026,8 +3026,8 @@ class Api extends MX_Controller
     {
         $patient = $this->input->post('id');
         $patient_ion_id = $this->input->post('ion_id');
-        $this->hospitalID = $this->getHospitalID($patient_ion_id);
-        $payments = $this->api_model->getPaymentByPatientId($patient, $this->hospitalID);
+        // $this->hospitalID = $this->getHospitalID($patient_ion_id);
+        $payments = $this->api_model->getPaymentByPatientId($patient);
         $total_bill = array();
         foreach ($payments as $payment) {
             $total_bill[] = $payment->gross_total;
@@ -3038,7 +3038,7 @@ class Api extends MX_Controller
             $data['total'] = 0;
         }
 
-        $deposits = $this->api_model->getDepositByPatientId($patient, $this->hospitalID);
+        $deposits = $this->api_model->getDepositByPatientId($patient);
         foreach ($deposits as $deposit) {
             $total_deposit[] = $deposit->deposited_amount;
         }
@@ -3121,7 +3121,7 @@ class Api extends MX_Controller
         // $this->hospitalID = $this->getHospitalID($userionId);
         $userId = $this->api_model->getPatientByIonUserIdAllHospitals($userionId)->id;
         $labs = $this->api_model->getPatientLabReport($userId);
-
+        logToConsoleFile($labs);
         foreach ($labs as $key => $lab) {
             $new_entry = array();
             if ($lab->category_id != null) {
