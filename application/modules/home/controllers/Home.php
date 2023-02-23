@@ -149,6 +149,11 @@ class Home extends MX_Controller
     {
         $this->load->view('permission');
     }
+
+    public function maintainance()
+    {
+        $this->load->view('maintainance');
+    }
 }
 
 /* End of file home.php */

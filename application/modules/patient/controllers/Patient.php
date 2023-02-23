@@ -889,6 +889,7 @@ class Patient extends MX_Controller
         if ($this->ion_auth->in_group(array('Patient'))) {
             $patient_ion_id = $this->ion_auth->get_user_id();
             $id = $this->patient_model->getPatientByIonUserId($patient_ion_id)->id;
+            redirect('home/maintainance');
         }
 
 

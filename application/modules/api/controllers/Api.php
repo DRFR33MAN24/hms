@@ -903,9 +903,9 @@ class Api extends MX_Controller
         $data['prescription'] = $this->api_model->getPrescriptionById($id);
         if (!empty($data['prescription']->hospital_id)) {
 
-            $data['settings'] = $this->api_model->getSettings($data['prescription']->hospitalID);
-            $data['doctor'] = $this->api_model->getDoctorById($data['prescription']->doctor, $data['prescription']->hospitalID);
-            $data['user'] = $this->api_model->getPatientById($data['prescription']->patient, $data['prescription']->hospitalID);
+            $data['settings'] = $this->api_model->getSettings($data['prescription']->hospital_id);
+            $data['doctor'] = $this->api_model->getDoctorById($data['prescription']->doctor, $data['prescription']->hospital_id);
+            $data['user'] = $this->api_model->getPatientById($data['prescription']->patient, $data['prescription']->hospital_id);
             $data['message'] = 'successful';
             echo json_encode($data);
         } else {
