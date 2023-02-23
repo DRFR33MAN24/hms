@@ -905,7 +905,7 @@ class Api extends MX_Controller
 
             $data['settings'] = $this->api_model->getSettings($data['prescription']->hospital_id);
             $data['doctor'] = $this->api_model->getDoctorById($data['prescription']->doctor, $data['prescription']->hospital_id);
-            $data['user'] = $this->api_model->getPatientById($data['prescription']->patient, $data['prescription']->hospital_id);
+            $data['user'] = $this->api_model->getPatientByIdMM($data['prescription']->patient);
             $data['message'] = 'successful';
             echo json_encode($data);
         } else {
@@ -2358,18 +2358,21 @@ class Api extends MX_Controller
         } else {
             $ion_id = $this->findPatientIonId($id);
         }
-        $this->hospitalID = $this->getHospitalID($ion_id);
+        // $this->hospitalID = $this->getHospitalID($ion_id);
         if ($group == 'doctor') {
             //$doctor = $this->db->get_where('doctor', array('ion_user_id' => $id))->row()->id;
             $data1['appointments'] = $this->api_model->getAppointmentListByDoctor($id, $this->hospitalID);
         } else {
-            $data1['appointments'] = $this->api_model->getAppointment($this->hospitalID);
+            $data1['appointments'] = $this->api_model->getAllPatientAppointments($this->api_model->getPatientByIonUserIdAllHospitals($id)->id);
         }
-
+        logToConsoleFile($data1);
         $i = 0;
 
         $data = [];
         foreach ($data1['appointments'] as $appointment) {
+            $this->db->where('id', $appointment->hospital_id);
+            $query = $this->db->get('hospital');
+            $hospital_name = $query->row()->name;
             //$i = $i + 1;
 
             if ($group == 'Patient') {
@@ -2377,13 +2380,13 @@ class Api extends MX_Controller
                 $patient_details = $this->api_model->getPatientByIonUserId($patient_ion_id, $this->hospitalID);
                 $patient_id = $patient_details->id;
                 if ($patient_id == $appointment->patient) {
-                    $patientdetails = $this->api_model->getPatientById($appointment->patient, $this->hospitalID);
+                    $patientdetails = $this->api_model->getPatientByIdMM($appointment->patient);
                     if (!empty($patientdetails)) {
                         $patientname = $patientdetails->name;
                     } else {
                         $patientname = $appointment->patientname;
                     }
-                    $doctordetails = $this->api_model->getDoctorById($appointment->doctor, $this->hospitalID);
+                    $doctordetails = $this->api_model->getDoctorByIdMM($appointment->doctor);
                     if (!empty($doctordetails)) {
                         $doctorname = $doctordetails->name;
                     } else {
@@ -2394,6 +2397,7 @@ class Api extends MX_Controller
                     if ($appointment->date == strtotime(date('Y-m-d'))) {
                         array_push($data, array(
                             "id" => $appointment->id,
+                            'hospital_name' => $hospital_name,
                             "patient_name" => $patientname,
                             "doctor_name" => $doctorname,
                             "date" => date('d-m-Y', $appointment->date),
@@ -2484,6 +2488,7 @@ class Api extends MX_Controller
         } else {
             //$data1['appointments'] = $this->api_model->getAppointment($this->hospitalID);
             $data1['appointments'] = $this->api_model->getAllPatientAppointments($this->api_model->getPatientByIonUserIdAllHospitals($id)->id);
+
             logToConsoleFile($data1);
         }
 
@@ -2492,6 +2497,9 @@ class Api extends MX_Controller
         $data = [];
         foreach ($data1['appointments'] as $appointment) {
             //$i = $i + 1;
+            $this->db->where('id', $appointment->hospital_id);
+            $query = $this->db->get('hospital');
+            $hospital_name = $query->row()->name;
 
             if ($group == 'patient') {
                 $patient_ion_id = $id;
@@ -2516,6 +2524,7 @@ class Api extends MX_Controller
                     if (true) {
                         array_push($data, array(
                             "id" => $appointment->id,
+                            'hospital_name' => $hospital_name,
                             "patient_name" => $patientname,
                             "doctor_name" => $doctorname,
                             "date" => date('d-m-Y', $appointment->date),
